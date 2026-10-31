@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — Kalakar</title>
+<meta name="robots" content="noindex, nofollow" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link rel="stylesheet" href="/admin/admin.css" />
+</head>
+<body>
+
+<div class="sidebar-scrim" id="scrim"></div>
+
+<div class="app">
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-mark">Kalak<span>a</span>r</div>
+    <div class="sidebar-tag">Admin Panel</div>
+
+    <nav>
+      <a href="#" class="nav-item active" data-view="dashboard"><i class="bi bi-grid"></i> Dashboard</a>
+      <a href="#" class="nav-item" data-view="orders"><i class="bi bi-box-seam"></i> Orders</a>
+      <a href="#" class="nav-item" data-view="products"><i class="bi bi-palette"></i> Products</a>
+      <a href="#" class="nav-item" data-view="seller-applications"><i class="bi bi-person-check"></i> Seller Applications</a>
+      <a href="#" class="nav-item" data-view="users"><i class="bi bi-people"></i> Users</a>
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-foot">
+      <div class="admin-chip">
+        <div class="admin-avatar" id="adminInitial">A</div>
+        <div>
+          <div class="admin-name" id="adminName">—</div>
+          <div class="admin-email" id="adminEmail">—</div>
+        </div>
+      </div>
+      <a href="../index.html" class="storefront-link"><i class="bi bi-box-arrow-up-right"></i> View storefront</a>
+      <a href="#" class="logout-link" id="logoutBtn"><i class="bi bi-box-arrow-left"></i> Log out</a>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <section class="view active" id="view-dashboard">
+      <div class="topbar">
+        <div><button class="mob-toggle" id="mobToggle1"><i class="bi bi-list"></i></button></div>
+      </div>
+      <div class="topbar">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">An overview of how the store is doing.</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="statsGrid">
+        <div class="loading-row"><span class="spin" style="border-top-color: var(--accent); border-color: var(--border);"></span></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Recent Orders</h3>
+          <a href="#" class="btn btn-sm" data-view="orders">View all orders</a>
+        </div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="recentOrdersBody">
+              <tr class="empty-row"><td colspan="5">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ORDERS ── -->
+    <section class="view" id="view-orders">
+      <div class="topbar">
+        <div><button class="mob-toggle" id="mobToggle2"><i class="bi bi-list"></i></button></div>
+      </div>
+      <div class="topbar">
+        <div>
+          <div class="page-title">Orders</div>
+          <div class="page-sub">Every order placed on the storefront.</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="filter-bar">
+            <input type="text" class="search-input" id="orderSearch" placeholder="Search order # or email…" />
+            <select class="select-status" id="orderStatusFilter">
+              <option value="">All statuses</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <button class="btn btn-sm" id="refreshOrders"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+        </div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th></th></tr></thead>
+            <tbody id="ordersBody">
+              <tr class="empty-row"><td colspan="8">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PRODUCTS ── -->
+    <section class="view" id="view-products">
+      <div class="topbar">
+        <div><button class="mob-toggle" id="mobToggle3"><i class="bi bi-list"></i></button></div>
+      </div>
+      <div class="topbar">
+        <div>
+          <div class="page-title">Products</div>
+          <div class="page-sub">The catalog customers see on the storefront.</div>
+        </div>
+        <button class="btn btn-dark" id="addProductBtn"><i class="bi bi-plus-lg"></i> Add Product</button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="filter-bar">
+            <input type="text" class="search-input" id="productSearch" placeholder="Search products…" />
+          </div>
+        </div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+            <tbody id="productsBody">
+              <tr class="empty-row"><td colspan="5">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    
+<!-- ── SELLER APPLICATIONS ── -->
+<section class="view" id="view-seller-applications">
+  <div class="topbar">
+    <div>
+      <button class="mob-toggle" id="mobToggle5">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="topbar">
+    <div>
+      <div class="page-title">Seller Applications</div>
+      <div class="page-sub">Review and approve people who want to sell on Kalakar.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="filter-bar">
+        <select class="select-status" id="sellerApplicationFilter">
+          <option value="">All applications</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+
+      <button class="btn btn-sm" id="refreshSellerApplications">
+        <i class="bi bi-arrow-clockwise"></i> Refresh
+      </button>
+    </div>
+
+    <div class="panel-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Seller</th>
+            <th>Business</th>
+            <th>Category</th>
+            <th>Contact</th>
+            <th>Application Details</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="sellerApplicationsBody">
+          <tr class="empty-row">
+            <td colspan="7">Loading applications…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+    <!-- ── USERS ── -->
+    <section class="view" id="view-users">
+      <div class="topbar">
+        <div><button class="mob-toggle" id="mobToggle4"><i class="bi bi-list"></i></button></div>
+      </div>
+      <div class="topbar">
+        <div>
+          <div class="page-title">Users</div>
+          <div class="page-sub">Everyone with a storefront account.</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="filter-bar">
+            <input type="text" class="search-input" id="userSearch" placeholder="Search name or email…" />
+          </div>
+        </div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Orders</th><th>Role</th><th>Status</th><th>Joined</th><th></th></tr></thead>
+            <tbody id="usersBody">
+              <tr class="empty-row"><td colspan="7">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══ PRODUCT MODAL ═══ -->
+<div class="modal-overlay" id="productModalOverlay">
+  <div class="modal">
+    <h3 id="productModalTitle">Add Product</h3>
+    <form id="productForm">
+      <input type="hidden" id="pId" />
+      <div class="field">
+        <label for="pName">Name</label>
+        <input type="text" id="pName" required />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="pCategory">Category</label>
+          <input type="text" id="pCategory" placeholder="e.g. Oil Painting" required />
+        </div>
+        <div class="field">
+          <label for="pPrice">Price (₹)</label>
+          <input type="number" id="pPrice" min="1" step="1" required />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="pOldPrice">Old price (optional)</label>
+          <input type="number" id="pOldPrice" min="1" step="1" />
+        </div>
+        <div class="field">
+          <label for="pStock">Stock</label>
+          <input type="number" id="pStock" min="0" step="1" value="0" required />
+        </div>
+      </div>
+      <div class="field">
+        <label for="pDesc">Description</label>
+        <textarea id="pDesc" placeholder="e.g. Oil on canvas · 18×24 in"></textarea>
+      </div>
+      <div class="field">
+        <label for="pImg">Image URL</label>
+        <input type="text" id="pImg" placeholder="https://…" />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="pSizes">Sizes (comma-separated)</label>
+          <input type="text" id="pSizes" placeholder="S, M, L, XL" />
+        </div>
+        <div class="field">
+          <label for="pBadge">Badge (optional)</label>
+          <select id="pBadge">
+            <option value="">None</option>
+            <option value="New">New</option>
+            <option value="Sale">Sale</option>
+            <option value="Limited">Limited</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="pActive">Visibility</label>
+        <select id="pActive">
+          <option value="true">Active — visible on storefront</option>
+          <option value="false">Hidden — not visible on storefront</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="productCancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-dark" id="productSaveBtn">Save Product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ ORDER DETAIL MODAL ═══ -->
+<div class="modal-overlay" id="orderModalOverlay">
+  <div class="modal" style="max-width:560px;">
+    <h3>Order Detail</h3>
+    <div id="orderDetailBody"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn" id="orderCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="/admin/admin.js"></script>
+</body>
+</html>

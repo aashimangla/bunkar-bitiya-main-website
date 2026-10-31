@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Shop discounted paintings, woollen wear and handcrafted gifts at Kalakar — up to 30% off." />
+  <title>Sale — Kalakar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link href="assets/css/kalakar.css" rel="stylesheet" />
+  <style>
+    .page-hero{justify-content:flex-start;padding-left:60px}
+    .ph-content{max-width:640px;text-align:left}
+    .header-top{padding:0 60px}
+    .logo{display:inline-flex;align-items:center;text-decoration:none;line-height:1;max-width:180px}
+    .logo img{display:block;height:80px;max-height:80px;width:130px;max-width:100%}
+    .footer-logo { margin-left: 120px; font-family: var(--serif); font-size: 26px; font-weight: 400; color: #fff; margin-bottom: 16px; display: block }
+
+    .footer-logo img { display: block; height: 80px; max-height: 80px; width: 130px; max-width: 100%; }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="toast-wrap" id="toastWrap"></div>
+  <button class="scroll-top" id="scrollTop"><i class="bi bi-arrow-up"></i></button>
+
+  <!-- ANNOUNCEMENT -->
+  <div class="ann-bar" id="annBar">
+    <div class="ticker-wrap">
+      <div class="ticker-inner">
+        <span>Free Shipping on orders above ₹999 &nbsp;·&nbsp; <a href="sale.html">Shop Now</a></span>
+        <span>New Himalayan Collection Now Live &nbsp;·&nbsp; <a href="newarrival.html">Explore</a></span>
+        <span>Use code <strong>KALAKAR10</strong> for 10% off your first order</span>
+        <span>Handcrafted with love by artisans across the Himalayas</span>
+        <span>Free Shipping on orders above ₹999 &nbsp;·&nbsp; <a href="sale.html">Shop Now</a></span>
+        <span>New Himalayan Collection Now Live &nbsp;·&nbsp; <a href="newarrival.html">Explore</a></span>
+        <span>Use code <strong>KALAKAR10</strong> for 10% off your first order</span>
+        <span>Handcrafted with love by artisans across the Himalayas</span>
+      </div>
+    </div>
+    <button class="ann-close" onclick="document.getElementById('annBar').style.display='none'">&times;</button>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-top">
+      <button class="d-mob-show" id="mobMenuBtn"
+        style="background:none;border:none;font-size:22px;color:var(--charcoal);cursor:none;"><i
+          class="bi bi-list"></i></button>
+      <a href="index.html" class="logo"><img src="assets/images/logo.jpeg" alt="Kalakar logo" /></a>
+      <div class="header-icons">
+        <button id="searchBtn"><i class="bi bi-search"></i></button>
+        <button id="wishBtn"><i class="bi bi-heart"></i></button>
+        <button id="cartBtn" style="position:relative;"><i class="bi bi-bag"></i><span class="cart-count"
+            id="cartCount">0</span></button>
+      </div>
+    </div>
+    <nav class="main-nav d-desk-only">
+      <a href="index.html">Home</a>
+      <a href="newarrival.html">New Arrivals</a>
+      <a href="paintings.html">Paintings</a>
+      <a href="wollen-wear.html">Woollen Wear</a>
+      <a href="handicrafted-gifts.html">Handcrafted Gifts</a>
+      <a href="our-story.html">Our Story</a>
+      <a href="sale.html" class="nav-sale active-nav">Sale</a>
+    </nav>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mob-overlay" id="mobOverlay" onclick="closeMobNav()"></div>
+  <div class="mob-nav" id="mobNav">
+    <div class="mob-nav-head">
+      <a href="index.html" class="logo" style="font-size:22px;"><img src="assets/images/logo.jpeg" alt="Kalakar logo" /></a>
+      <button onclick="closeMobNav()"
+        style="background:none;border:none;font-size:22px;cursor:none;color:var(--muted);">&times;</button>
+    </div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="newarrival.html">New Arrivals</a></li>
+      <li><a href="paintings.html">Paintings</a></li>
+      <li><a href="wollen-wear.html">Woollen Wear</a></li>
+      <li><a href="handicrafted-gifts.html">Handcrafted Gifts</a></li>
+      <li><a href="our-story.html">Our Story</a></li>
+      <li><a href="sale.html" style="color:var(--accent);">Sale</a></li>
+    </ul>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-drawer" id="searchDrawer">
+    <div class="s-inner">
+      <i class="bi bi-search" style="font-size:18px;color:var(--muted);flex-shrink:0;"></i>
+      <input type="text" id="searchInput" placeholder="Search sale items…" autocomplete="off" />
+      <button onclick="closeSearch()"
+        style="background:none;border:none;font-size:24px;cursor:none;color:var(--muted);">&times;</button>
+    </div>
+    <div class="s-results" id="searchResults"></div>
+  </div>
+
+  <!-- CART -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-head">
+      <h5>Your Bag (<span id="cartCount2">0</span>)</h5>
+      <button onclick="closeCart()"
+        style="background:none;border:none;font-size:24px;cursor:none;color:var(--muted);">&times;</button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <div class="cart-empty-box" id="cartEmptyBox">
+        <i class="bi bi-bag"></i>
+        <p style="margin-bottom:16px;">Your bag is empty</p>
+        <button
+          style="background:var(--charcoal);color:#fff;border:none;padding:12px 28px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;cursor:none;font-family:var(--sans);"
+          onclick="closeCart()">Continue Shopping</button>
+      </div>
+      <div id="cartItemsList"></div>
+    </div>
+    <div class="cart-foot" id="cartFoot" style="display:none;">
+      <div class="total-row"><span>Subtotal</span><span id="cartTotal">₹0</span></div>
+      <p class="tax-note">Taxes & shipping at checkout</p>
+      <button class="btn-checkout" onclick="openPay()">Proceed to Checkout</button>
+      <button class="btn-secure" onclick="openPay()"><i class="bi bi-shield-lock me-1"></i>Secure Payment</button>
+    </div>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar">
+    <nav>
+      <a href="index.html">Home</a>
+      <i class="bi bi-chevron-right" style="font-size:10px;"></i>
+      <span>Sale</span>
+    </nav>
+  </div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="ph-bg" style="background-image:url('assets/images/hero_images/sale.jpg')"></div>
+    <div class="ph-overlay"></div>
+    <div class="ph-content">
+      <p class="ph-eyebrow">Up to 30% Off · Limited Time</p>
+      <h1 class="ph-title">The <em>Sale</em></h1>
+      <p class="ph-sub">Handpicked paintings, woollens & gifts at special prices</p>
+    </div>
+  </div>
+
+  <!-- CATEGORY SHOWCASE -->
+  <div class="cat-showcase">
+    <div class="cat-showcase-item active-cat" onclick="setMedium('all',this)">
+      <img src="assets/images/sales/1.jpg" alt="All Sale Items" />
+      <div class="cs-overlay"><span class="cs-name">All Sale Items</span><span class="cs-count">10 pieces</span><span class="cs-cta">Shop Now →</span></div>
+    </div>
+    <div class="cat-showcase-item" onclick="setMedium('paintings',this)">
+      <img src="assets/images/sales/2.jpg" alt="Paintings" />
+      <div class="cs-overlay"><span class="cs-name">Paintings</span><span class="cs-count">4 pieces</span><span class="cs-cta">Shop Now →</span></div>
+    </div>
+    <div class="cat-showcase-item" onclick="setMedium('woollen wear',this)">
+      <img src="assets/images/sales/3.jpg " alt="Woollen Wear" />
+      <div class="cs-overlay"><span class="cs-name">Woollen Wear</span><span class="cs-count">3 pieces</span><span class="cs-cta">Shop Now →</span></div>
+    </div>
+    <div class="cat-showcase-item" onclick="setMedium('handcrafted gifts',this)">
+      <img src="assets/images/sales/4.jpg" alt="Handcrafted Gifts" />
+      <div class="cs-overlay"><span class="cs-name">Handcrafted Gifts</span><span class="cs-count">3 pieces</span><span class="cs-cta">Shop Now →</span></div>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-bar-left" id="filterTabs">
+      <button class="filter-tab active" onclick="setTab('all',this)">All</button>
+      <button class="filter-tab" onclick="setTab('paintings',this)">Paintings</button>
+      <button class="filter-tab" onclick="setTab('woollen wear',this)">Woollen Wear</button>
+      <button class="filter-tab" onclick="setTab('handcrafted gifts',this)">Handcrafted Gifts</button>
+      <button class="filter-tab" onclick="setTab('30',this)">30% Off</button>
+      <button class="filter-tab" onclick="setTab('limited',this)" style="color:var(--accent);">Limited Stock</button>
+    </div>
+    <div class="filter-bar-right">
+      <span class="result-count" id="resultCount">0 sale items</span>
+      <select class="sort-select" id="sortSelect" onchange="applySort()">
+        <option value="newest">Newest First</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+        <option value="bestselling">Best Selling</option>
+      </select>
+      <div class="grid-toggle d-desk-only">
+        <button class="grid-btn active" onclick="setGrid(4,this)"><i class="bi bi-grid"></i></button>
+        <button class="grid-btn" onclick="setGrid(3,this)"><i class="bi bi-grid-3x3-gap"></i></button>
+        <button class="grid-btn" onclick="setGrid('list',this)"><i class="bi bi-list-ul"></i></button>
+      </div>
+      <button class="filter-toggle-btn d-desk-only" id="sbToggleBtn" onclick="toggleSB()"><i class="bi bi-sliders"></i>
+        Filters</button>
+      <button class="filter-toggle-btn d-mob-show" onclick="openMF()"><i class="bi bi-sliders"></i> Filters</button>
+    </div>
+  </div>
+
+  <!-- ACTIVE PILLS -->
+  <div class="active-filters" id="activePillsBar">
+    <div id="pillsContainer"></div>
+    <button class="clear-all-btn" onclick="clearAll()">Clear All</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="shop-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="fg">
+        <div class="fg-head">
+          <h6>Category</h6><button class="fg-icon open" onclick="toggleFG(this)"><i class="bi bi-chevron-up"></i></button>
+        </div>
+        <div class="fg-body" style="max-height:220px;" id="fg-medium">
+          <div class="fcheck"><label><input type="checkbox" onchange="addF('medium','Painting',this)" /> Painting</label><span class="fc">4</span></div>
+          <div class="fcheck"><label><input type="checkbox" onchange="addF('medium','Woollen',this)" /> Woollen</label><span class="fc">3</span></div>
+          <div class="fcheck"><label><input type="checkbox" onchange="addF('medium','Gift',this)" /> Gift</label><span class="fc">3</span></div>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="fg-head">
+          <h6>Price Range</h6><button class="fg-icon open" onclick="toggleFG(this)"><i class="bi bi-chevron-up"></i></button>
+        </div>
+        <div class="fg-body" style="max-height:180px;">
+          <div class="price-inputs">
+            <span style="font-size:12px;color:var(--muted);">₹</span>
+            <input class="p-inp" type="number" id="priceMin" value="0" oninput="applyPF()" />
+            <span style="font-size:12px;color:var(--muted);">—</span>
+            <input class="p-inp" type="number" id="priceMax" value="6500" oninput="applyPF()" />
+          </div>
+          <input type="range" class="range-sl" min="0" max="6500" value="6500" id="priceSlider"
+            oninput="document.getElementById('priceMax').value=this.value;applyPF()" />
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px;">
+            <span>₹0</span><span>₹6,500</span></div>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="fg-head">
+          <h6>Rating</h6><button class="fg-icon open" onclick="toggleFG(this)"><i class="bi bi-chevron-up"></i></button>
+        </div>
+        <div class="fg-body" style="max-height:150px;">
+          <div class="rating-opt" onclick="toggleRating(5)"><span class="r-stars">★★★★★</span><span style="font-size:12px;color:var(--muted);">& above</span></div>
+          <div class="rating-opt" onclick="toggleRating(4)"><span class="r-stars">★★★★☆</span><span style="font-size:12px;color:var(--muted);">& above</span></div>
+          <div class="rating-opt" onclick="toggleRating(3)"><span class="r-stars">★★★☆☆</span><span style="font-size:12px;color:var(--muted);">& above</span></div>
+        </div>
+      </div>
+      <button class="sb-reset" onclick="clearAll()">Reset All Filters</button>
+    </aside>
+
+    <div class="products-area" id="productsArea">
+      <div id="productGrid" class="pg-4"></div>
+      <div class="no-results" id="noResults">
+        <i class="bi bi-palette"></i>
+        <h4>No products found</h4>
+        <p>Try adjusting your filters</p>
+        <button
+          style="background:var(--charcoal);color:#fff;border:none;padding:13px 32px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:none;font-family:var(--sans);"
+          onclick="clearAll()">Clear Filters</button>
+      </div>
+      <div class="load-more-wrap" id="lmWrap">
+        <button class="btn-load" onclick="loadMore()">Load More</button>
+        <div class="load-prog">
+          <span id="loadedN">12</span> of <span id="totalN">0</span> products
+          <div class="prog-bar-wrap">
+            <div class="prog-fill" id="progFill" style="width:60%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDITORIAL -->
+  <div class="editorial-strip">
+    <div class="es-img"><img src="assets/images/sales/5.jpg" alt="Studio" /></div>
+    <div class="es-content">
+      <p class="eyebrow">Limited-Time Offers</p>
+      <h2>Don't Miss These<br><em>Handcrafted Favourites</em></h2>
+      <p>Our sale features genuine end-of-season pieces from our regular collections — same quality, same artisans, special prices while stock lasts.</p>
+      <a href="collections.html" class="btn-accent">Shop All Collections</a>
+    </div>
+  </div>
+
+  <!-- MOBILE FILTER -->
+  <div class="mob-filter-overlay" id="mfOverlay" onclick="closeMF()"></div>
+  <div class="mob-filter-drawer" id="mfDrawer">
+    <div
+      style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+      <h5 style="font-family:var(--serif);font-size:22px;font-weight:400;">Filters</h5>
+      <button onclick="closeMF()"
+        style="background:none;border:none;font-size:22px;cursor:none;color:var(--muted);">&times;</button>
+    </div>
+    <div id="mfBody"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button
+        style="flex:1;background:none;border:1px solid var(--border);padding:13px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:none;font-family:var(--sans);"
+        onclick="clearAll()">Clear All</button>
+      <button
+        style="flex:1;background:var(--charcoal);color:#fff;border:none;padding:13px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:none;font-family:var(--sans);"
+        onclick="closeMF()">Apply</button>
+    </div>
+  </div>
+
+  <!-- QUICK VIEW -->
+  <div class="qv-overlay" id="qvOverlay" onclick="if(event.target===this)closeQV()">
+    <div class="qv-box">
+      <div class="qv-gallery">
+        <img class="qv-main-img" id="qvMainImg" src="" alt="" />
+        <div class="qv-thumbs" id="qvThumbs"></div>
+        <span id="qvBadge"
+          style="position:absolute;top:12px;left:12px;display:none;color:#fff;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;"></span>
+      </div>
+      <div class="qv-details">
+        <p class="qv-eye" id="qvCat"></p>
+        <h3 class="qv-name" id="qvName"></h3>
+        <div class="qv-rating" id="qvRating"></div>
+        <div class="qv-price" id="qvPrice"></div>
+        <p class="qv-desc" id="qvDesc"></p>
+        <hr class="qv-divider" />
+        <p class="qv-label" id="qvSizeLabel">Size</p>
+        <div class="size-select" id="qvSizes"></div>
+        <p class="qv-label">Quantity</p>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="chgQty(-1)">−</button>
+          <span class="qty-n" id="qvQtyNum">1</span>
+          <button class="qty-btn" onclick="chgQty(1)">+</button>
+        </div>
+        <button class="btn-atc" onclick="addFromQV()">Add to Bag</button>
+        <button class="btn-bn" onclick="buyNowQV()">Buy Now</button>
+        <div class="qv-feats">
+          <div class="qv-feat"><i class="bi bi-award"></i><span>Certificate of Authenticity</span></div>
+          <div class="qv-feat"><i class="bi bi-box-seam"></i><span>Free shipping above ₹999</span></div>
+          <div class="qv-feat"><i class="bi bi-arrow-return-left"></i><span>15-day returns</span></div>
+          <div class="qv-feat"><i class="bi bi-hand-index-thumb"></i><span>Handcrafted, one of a kind</span></div>
+        </div>
+      </div>
+      <button class="qv-close" onclick="closeQV()"><i class="bi bi-x"></i></button>
+    </div>
+  </div>
+
+  <!-- PAYMENT -->
+  <div class="pay-overlay" id="payOverlay" onclick="if(event.target===this)closePay()">
+    <div class="pay-box">
+      <div class="pay-hdr">
+        <div class="pay-logo">Kala<span>kar</span></div>
+        <div class="pay-amt-info" style="text-align:right;">
+          <p>Total Amount</p><strong id="payAmt">₹0</strong>
+        </div>
+        <button class="pay-close-btn" onclick="closePay()">&times;</button>
+      </div>
+      <div class="pay-body" id="payBody">
+        <div class="pay-tabs">
+          <button class="pay-tab active" onclick="swTab('card',this)"><i
+              class="bi bi-credit-card me-1"></i>Card</button>
+          <button class="pay-tab" onclick="swTab('upi',this)"><i class="bi bi-phone me-1"></i>UPI</button>
+          <button class="pay-tab" onclick="swTab('nb',this)"><i class="bi bi-bank me-1"></i>Net Banking</button>
+          <button class="pay-tab" onclick="swTab('cod',this)"><i class="bi bi-cash me-1"></i>COD</button>
+        </div>
+        <div class="pay-panel active" id="panel-card">
+          <div class="pay-field"><label>Card Number</label><input type="text" id="cardNum"
+              placeholder="1234  5678  9012  3456" maxlength="19" oninput="fmtCard(this)" /></div>
+          <div class="pay-field"><label>Cardholder Name</label><input type="text" placeholder="As on card" /></div>
+          <div class="pay-2col">
+            <div class="pay-field"><label>Expiry</label><input type="text" placeholder="MM / YY" maxlength="7"
+                oninput="fmtExp(this)" /></div>
+            <div class="pay-field"><label>CVV</label><input type="password" placeholder="•••" maxlength="4" /></div>
+          </div>
+          <button class="btn-pay" onclick="processPay()"><i class="bi bi-lock-fill me-1"></i>Pay Securely</button>
+        </div>
+        <div class="pay-panel" id="panel-upi">
+          <div class="upi-apps">
+            <div class="upi-app" onclick="selUPI(this)"><i class="bi bi-phone-fill"></i><span>GPay</span></div>
+            <div class="upi-app" onclick="selUPI(this)"><i class="bi bi-phone"></i><span>PhonePe</span></div>
+            <div class="upi-app" onclick="selUPI(this)"><i class="bi bi-currency-rupee"></i><span>BHIM</span></div>
+            <div class="upi-app" onclick="selUPI(this)"><i class="bi bi-wallet2"></i><span>Paytm</span></div>
+          </div>
+          <div class="pay-field"><label>Or enter UPI ID</label><input type="text" placeholder="yourname@upi" /></div>
+          <button class="btn-pay" onclick="processPay()"><i class="bi bi-lock-fill me-1"></i>Verify & Pay</button>
+        </div>
+        <div class="pay-panel" id="panel-nb">
+          <div class="pay-field"><label>Select Bank</label>
+            <select>
+              <option>State Bank of India</option>
+              <option>HDFC Bank</option>
+              <option>ICICI Bank</option>
+              <option>Axis Bank</option>
+              <option>Kotak Mahindra</option>
+              <option>Punjab National Bank</option>
+              <option>Other Banks</option>
+            </select>
+          </div>
+          <button class="btn-pay" onclick="processPay()"><i class="bi bi-lock-fill me-1"></i>Proceed to Bank</button>
+        </div>
+        <div class="pay-panel" id="panel-cod">
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:18px;">Pay cash at delivery. ₹49 COD
+            fee applies on orders below ₹5,000.</p>
+          <div class="pay-field"><label>Mobile Number</label><input type="tel" placeholder="+91 9876543210" /></div>
+          <button class="btn-pay" onclick="processPay()"><i class="bi bi-check-circle me-1"></i>Confirm Order</button>
+        </div>
+        <div class="pay-secure-note"><i class="bi bi-shield-check" style="color:var(--accent)"></i>256-bit SSL secured ·
+          Powered by Razorpay</div>
+      </div>
+      <div class="pay-success" id="paySuccess">
+        <i class="bi bi-check-circle-fill check-icon"></i>
+        <h4>Order Confirmed!</h4>
+        <p>Thank you for choosing Kalakar.<br />Your order will be carefully packaged and shipped within 3–5 working
+          days.</p>
+        <button
+          style="background:var(--accent);color:#fff;border:none;padding:14px 30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:none;font-family:var(--sans);"
+          onclick="payDone()">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="footer-logo"><img src="assets/images/logo-footer.jpeg" alt="Kalakar logo"/></a>
+        <p class="footer-about">Original paintings and handcrafted woollens by Himalayan artisans. Art you can wear. Art
+          you can live with.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a><a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-pinterest"></i></a><a href="#"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h6>Shop</h6>
+        <ul>
+          <li><a href="newarrival.html">New Arrivals</a></li>
+          <li><a href="paintings.html">Paintings</a></li>
+          <li><a href="wollen-wear.html">Woollen Wear</a></li>
+          <li><a href="handicrafted-gifts.html">Handcrafted Gifts</a></li>
+          <li><a href="sale.html">Sale</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h6>Help</h6>
+        <ul>
+          <li><a href="shipping-info.html">Shipping Info</a></li>
+          <li><a href="returns-exchanges.html">Returns & Exchanges</a></li>
+          <li><a href="order-tracking.html">Order Tracking</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h6>Newsletter</h6>
+        <p style="font-size:12.5px;color:rgba(255,255,255,.4);line-height:1.6;margin-bottom:16px;">New artworks,
+          exclusive drops.</p>
+        <div class="fnl"><input type="email" id="footerEmail" placeholder="Your email" /><button
+            onclick="footerSub()">Subscribe</button></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Kalakar. All rights reserved.</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;"><span class="pay-badge">Razorpay</span><span
+          class="pay-badge">UPI</span><span class="pay-badge">Visa</span><span class="pay-badge">Mastercard</span></div>
+      <div style="display:flex;gap:16px;"><a href="privacy-policy.html"
+          style="color:rgba(255,255,255,.3);font-size:11.5px;text-decoration:none;">Privacy Policy</a><a
+          href="terms.html" style="color:rgba(255,255,255,.3);font-size:11.5px;text-decoration:none;">Terms</a></div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* PRODUCT DATA */
+    const SALE = [
+      { id: 1, name: 'Himalayan Sunrise', medium: 'Painting', mediumFull: 'Oil on canvas', cat: 'Paintings', desc: '18×24 in · Oil on canvas', long: 'A breathtaking depiction of dawn breaking over the Himalayan peaks, now on sale. Ships with certificate of authenticity.', price: 3840, oldPrice: 4800, img: 'https://images.unsplash.com/photo-1580136608922-bf7a14f9d0ae?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1580136608922-bf7a14f9d0ae?w=200&q=70'], badge: '20% Off', badgeClass: 'pb-ltd', sizes: ['12×16 in', '18×24 in', '24×36 in'], rating: 5, reviews: 18, tags: ['Sale', 'Painting', 'Oil'], limited: false },
+      { id: 2, name: 'Pashmina Handwoven Shawl', medium: 'Woollen', mediumFull: 'Hand-woven Pashmina', cat: 'Woollen Wear', desc: 'One Size · Hand-woven Pashmina', long: 'A featherlight Pashmina shawl hand-woven by artisans in Kashmir, now reduced for our seasonal sale. Limited stock remaining.', price: 3500, oldPrice: 5000, img: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200&q=70'], badge: '30% Off', badgeClass: 'pb-ltd', sizes: ['One Size'], rating: 5, reviews: 22, tags: ['Sale', 'Pashmina', 'Shawl'], limited: true },
+      { id: 3, name: 'Copper Dhokra Figurine', medium: 'Gift', mediumFull: 'Lost-wax cast copper', cat: 'Handcrafted Gifts', desc: '6 in tall · Lost-wax cast', long: 'A striking lost-wax cast Dhokra figurine, handmade using a 4,000-year-old bronze casting technique, now discounted.', price: 1760, oldPrice: 2200, img: 'https://images.unsplash.com/photo-1585518433608-a4c13c15f2c5?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1585518433608-a4c13c15f2c5?w=200&q=70'], badge: '20% Off', badgeClass: 'pb-ltd', sizes: ['One Size'], rating: 5, reviews: 11, tags: ['Sale', 'Dhokra', 'Gift'], limited: true },
+      { id: 4, name: 'Valley Mist Oil Painting', medium: 'Painting', mediumFull: 'Oil on canvas', cat: 'Paintings', desc: '20×28 in · Oil on canvas', long: 'A richly layered oil painting of a mist-filled Himalayan valley, marked down as part of our end-of-season sale.', price: 4650, oldPrice: 6200, img: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&q=70'], badge: '25% Off', badgeClass: 'pb-ltd', sizes: ['20×28 in', '30×40 in'], rating: 5, reviews: 6, tags: ['Sale', 'Painting', 'Oil'], limited: false },
+      { id: 5, name: 'Merino Wool Scarf', medium: 'Woollen', mediumFull: 'Hand-knitted Merino wool', cat: 'Woollen Wear', desc: '70×12 in · Hand-knitted', long: 'A soft, hand-knitted Merino wool scarf in a classic cable pattern — now discounted while stock lasts.', price: 1260, oldPrice: 1800, img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=70'], badge: '30% Off', badgeClass: 'pb-ltd', sizes: ['One Size'], rating: 4, reviews: 17, tags: ['Sale', 'Scarf', 'Merino'], limited: false },
+      { id: 6, name: 'Kashmiri Kalamkari Wall Panel', medium: 'Gift', mediumFull: 'Hand-painted fabric art', cat: 'Handcrafted Gifts', desc: '12×18 in · Hand-painted fabric', long: 'A hand-painted Kalamkari fabric wall panel with intricate mythological motifs, now reduced for a limited time.', price: 1120, oldPrice: 1600, img: 'https://images.unsplash.com/photo-1561059488-916d69792237?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1561059488-916d69792237?w=200&q=70'], badge: '30% Off', badgeClass: 'pb-ltd', sizes: ['12×18 in'], rating: 4, reviews: 14, tags: ['Sale', 'Kalamkari', 'Fabric Art'], limited: false },
+      { id: 7, name: 'Moonlit Peaks Watercolour', medium: 'Painting', mediumFull: 'Watercolour on cotton paper', cat: 'Paintings', desc: '14×20 in · Watercolour on cotton paper', long: 'A luminous watercolour of moonlit Himalayan peaks, translucent blue washes layered by hand — now on sale.', price: 2480, oldPrice: 3100, img: 'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=200&q=70'], badge: '20% Off', badgeClass: 'pb-ltd', sizes: ['14×20 in', '21×30 in'], rating: 5, reviews: 19, tags: ['Sale', 'Painting', 'Watercolour'], limited: false },
+      { id: 8, name: 'Chunky Knit Beanie', medium: 'Woollen', mediumFull: 'Hand-knitted wool', cat: 'Woollen Wear', desc: 'One Size · Hand-knitted', long: 'A cosy chunky-knit wool beanie in a classic ribbed pattern, hand-knitted by our artisan partners in Himachal — now discounted.', price: 840, oldPrice: 1200, img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&q=70'], badge: '30% Off', badgeClass: 'pb-ltd', sizes: ['One Size'], rating: 4, reviews: 25, tags: ['Sale', 'Beanie', 'Knit'], limited: false },
+      { id: 9, name: 'Abstract Bloom Acrylic', medium: 'Painting', mediumFull: 'Acrylic on canvas', cat: 'Paintings', desc: '12×16 in · Acrylic on canvas', long: 'An explosion of colour inspired by wildflowers in Himalayan meadows, marked down for our sale.', price: 2080, oldPrice: 2600, img: 'https://images.unsplash.com/photo-1579762593131-b8945254345a?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1579762593131-b8945254345a?w=200&q=70'], badge: '20% Off', badgeClass: 'pb-ltd', sizes: ['12×16 in', '18×24 in'], rating: 4, reviews: 12, tags: ['Sale', 'Painting', 'Acrylic'], limited: false },
+      { id: 10, name: 'Handwoven Table Runner', medium: 'Gift', mediumFull: 'Handwoven cotton-wool blend', cat: 'Handcrafted Gifts', desc: '14×72 in · Handwoven', long: 'A handwoven table runner in a traditional Himalayan geometric pattern — perfect as a discounted festive gift.', price: 980, oldPrice: 1400, img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80', thumbs: ['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=70'], badge: '30% Off', badgeClass: 'pb-ltd', sizes: ['14×72 in'], rating: 5, reviews: 9, tags: ['Sale', 'Table Runner', 'Handwoven'], limited: true },
+    ];
+
+    /* STATE */
+    let mediumFilter = 'all', tabFilter = 'all', filters = { medium: [], subject: [], avail: [], size: [], rating: 0 }, priceRange = { min: 0, max: 6500 }, sortBy = 'newest', gridMode = 4, displayed = 12, sbVisible = true;
+    let cart = [], qvP = null, qvQty = 1;
+
+    function getFiltered() {
+      let r = [...SALE];
+      if (mediumFilter !== 'all') r = r.filter(p => p.medium.toLowerCase() === mediumFilter || (p.cat && p.cat.toLowerCase() === mediumFilter));
+      if (tabFilter === 'paintings') r = r.filter(p => p.cat === 'Paintings');
+      else if (tabFilter === 'woollen wear') r = r.filter(p => p.cat === 'Woollen Wear');
+      else if (tabFilter === 'handcrafted gifts') r = r.filter(p => p.cat === 'Handcrafted Gifts');
+      else if (tabFilter === '30') r = r.filter(p => p.badge === '30% Off');
+      else if (tabFilter === 'limited') r = r.filter(p => p.limited);
+      if (filters.medium.length) r = r.filter(p => filters.medium.some(m => p.medium === m || (p.mediumFull && p.mediumFull.includes(m))));
+      if (filters.subject.length) r = r.filter(p => filters.subject.includes(p.cat));
+      if (filters.rating) r = r.filter(p => p.rating >= filters.rating);
+      if (filters.avail.includes('On Sale')) r = r.filter(p => p.oldPrice);
+      r = r.filter(p => p.price >= priceRange.min && p.price <= priceRange.max);
+      if (sortBy === 'price-low') r.sort((a, b) => a.price - b.price);
+      else if (sortBy === 'price-high') r.sort((a, b) => b.price - a.price);
+      else if (sortBy === 'rating') r.sort((a, b) => b.rating - a.rating || b.reviews - a.reviews);
+      else if (sortBy === 'bestselling') r.sort((a, b) => b.reviews - a.reviews);
+      else r.sort((a, b) => b.id - a.id);
+      return r;
+    }
+
+    function refresh() {
+      const fp = getFiltered(); displayed = Math.min(12, fp.length);
+      renderGrid(fp, displayed); renderPills();
+    }
+
+    function renderGrid(fp, count) {
+      const grid = document.getElementById('productGrid');
+      const nr = document.getElementById('noResults');
+      const lm = document.getElementById('lmWrap');
+      const toShow = fp.slice(0, count);
+      if (!toShow.length) { grid.innerHTML = ''; nr.classList.add('show'); lm.style.display = 'none'; return; }
+      nr.classList.remove('show');
+      grid.className = gridMode === 4 ? 'pg-4' : gridMode === 3 ? 'pg-3' : 'pg-list';
+      grid.innerHTML = gridMode === 'list' ? toShow.map((p, i) => listCard(p, i)).join('') : toShow.map((p, i) => gridCard(p, i)).join('');
+      if (fp.length > count) { lm.style.display = 'block'; document.getElementById('loadedN').textContent = count; document.getElementById('totalN').textContent = fp.length; document.getElementById('progFill').style.width = (count / fp.length * 100) + '%'; }
+      else lm.style.display = 'none';
+      document.getElementById('resultCount').textContent = fp.length + ' item' + (fp.length !== 1 ? 's' : '');
+      bindCursor();
+    }
+
+    function gridCard(p, i) {
+      const delay = (i % 4) * 0.08;
+      const badge = p.badge ? `<span class="p-badge ${p.badgeClass}">${p.badge}</span>` : '';
+      const price = p.oldPrice ? `<span class="old-p">₹${p.oldPrice.toLocaleString()}</span><span class="sale-p">₹${p.price.toLocaleString()}</span>` : `₹${p.price.toLocaleString()}`;
+      const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
+      return `<div class="product-card" data-id="${p.id}" style="animation-delay:${delay}s">
+    <div class="product-img-wrap">${badge}
+      <img src="${p.img}" alt="${p.name}" loading="lazy"/>
+      <button class="p-wish" onclick="toggleWish(this,event)"><i class="bi bi-heart"></i></button>
+      <button class="quick-add" onclick="openQV(${p.id},event)">Quick View</button>
+    </div>
+    <div class="p-info">
+      <div class="p-rating">${stars} <span style="color:var(--muted);font-size:11px;">(${p.reviews})</span></div>
+      <div class="p-name" onclick="openQV(${p.id})">${p.name}</div>
+      <div class="p-desc">${p.desc}</div>
+      <div class="p-price">${price}</div>
+      <div class="p-tags">${p.tags.slice(0, 3).map(t => `<span class="p-tag">${t}</span>`).join('')}</div>
+    </div>
+  </div>`;
+    }
+
+    function listCard(p, i) {
+      const badge = p.badge ? `<span class="p-badge ${p.badgeClass}" style="position:absolute;top:12px;left:12px;">${p.badge}</span>` : '';
+      const price = p.oldPrice ? `<span class="old-p">₹${p.oldPrice.toLocaleString()}</span><span class="sale-p"> ₹${p.price.toLocaleString()}</span>` : `₹${p.price.toLocaleString()}`;
+      const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
+      return `<div class="product-list-card" style="animation-delay:${i * 0.07}s">
+    <div class="plc-img"><img src="${p.img}" alt="${p.name}" loading="lazy"/>${badge}</div>
+    <div class="plc-body">
+      <div>
+        <div class="plc-cat">${p.medium} · ${p.cat}</div>
+        <div class="plc-name">${p.name}</div>
+        <div style="font-size:12px;color:var(--accent);margin-bottom:8px;">${stars} <span style="color:var(--muted);font-size:11px;">(${p.reviews})</span></div>
+        <div class="plc-sub">${p.desc}</div>
+        <div class="plc-desc">${p.long.slice(0, 130)}…</div>
+      </div>
+      <div class="plc-footer">
+        <div class="plc-price">${price}</div>
+        <div class="plc-actions">
+          <button class="plc-wish" onclick="toggleWish(this,event)"><i class="bi bi-heart"></i></button>
+          <button class="plc-qv" onclick="openQV(${p.id},event)">Quick View</button>
+          <button class="plc-atc" onclick="addCart(SALE.find(x=>x.id==${p.id}))">Add to Bag</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+    }
+
+    function setTab(t, btn) { tabFilter = t; document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); refresh(); }
+    function setMedium(m, el) { mediumFilter = m; document.querySelectorAll('.cat-showcase-item').forEach(x => x.classList.remove('active-cat')); el.classList.add('active-cat'); refresh(); }
+    function addF(type, val, inp) { const arr = filters[type] || (filters[type] = []); if (inp.checked !== false) { if (!arr.includes(val)) arr.push(val); } else { const i = arr.indexOf(val); if (i > -1) arr.splice(i, 1); } refresh(); }
+    function toggleSize(el, sz) { el.classList.toggle('active'); const arr = filters.size || (filters.size = []); const i = arr.indexOf(sz); i > -1 ? arr.splice(i, 1) : arr.push(sz); refresh(); }
+    function toggleRating(n) { filters.rating = filters.rating === n ? 0 : n; refresh(); }
+    function applyPF() { priceRange.min = +document.getElementById('priceMin').value || 0; priceRange.max = +document.getElementById('priceMax').value || 6500; refresh(); }
+    function applySort() { sortBy = document.getElementById('sortSelect').value; refresh(); }
+    function setGrid(m, btn) { gridMode = m; document.querySelectorAll('.grid-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderGrid(getFiltered(), displayed); }
+    function loadMore() { const fp = getFiltered(); displayed = Math.min(displayed + 8, fp.length); renderGrid(fp, displayed); showToast(`Showing ${displayed} of ${fp.length} items`); }
+    function clearAll() { mediumFilter = 'all'; tabFilter = 'all'; filters = { medium: [], subject: [], avail: [], size: [], rating: 0 }; priceRange = { min: 0, max: 6500 }; document.getElementById('priceMin').value = 0; document.getElementById('priceMax').value = 6500; document.getElementById('priceSlider').value = 6500; document.querySelectorAll('#sidebar input[type=checkbox]').forEach(c => c.checked = false); document.querySelectorAll('.canvas-size,.medium-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.cat-showcase-item').forEach((el, i) => { el.classList.toggle('active-cat', i === 0); }); document.querySelectorAll('.filter-tab').forEach((t, i) => t.classList.toggle('active', i === 0)); sortBy = 'newest'; document.getElementById('sortSelect').value = 'newest'; refresh(); }
+
+    function renderPills() {
+      const bar = document.getElementById('activePillsBar');
+      const pills = document.getElementById('pillsContainer');
+      const allF = [...filters.medium, ...filters.subject, ...filters.avail, ...filters.size, ...(filters.rating ? ['★' + filters.rating + '+'] : [])];
+      const hasPriceF = priceRange.max < 6500;
+      if (!allF.length && tabFilter === 'all' && mediumFilter === 'all' && !hasPriceF) { bar.classList.remove('show'); return; }
+      bar.classList.add('show');
+      pills.innerHTML = [
+        ...(tabFilter !== 'all' ? [{ l: 'Tab: ' + tabFilter, c: () => { tabFilter = 'all'; document.querySelectorAll('.filter-tab').forEach((t, i) => t.classList.toggle('active', i === 0)); refresh(); } }] : []),
+        ...(mediumFilter !== 'all' ? [{ l: 'Category: ' + mediumFilter, c: () => { mediumFilter = 'all'; document.querySelectorAll('.cat-showcase-item').forEach((el, i) => el.classList.toggle('active-cat', i === 0)); refresh(); } }] : []),
+        ...(hasPriceF ? [{ l: `Up to ₹${priceRange.max.toLocaleString()}`, c: () => { priceRange.max = 6500; document.getElementById('priceMax').value = 6500; document.getElementById('priceSlider').value = 6500; refresh(); } }] : []),
+      ].map(pill => `<span class="filter-pill">${pill.l} <button onclick="(${pill.c.toString()})()">&times;</button></span>`).join('');
+    }
+
+    function toggleSB() { sbVisible = !sbVisible; document.getElementById('sidebar').classList.toggle('hidden', !sbVisible); document.getElementById('sbToggleBtn').innerHTML = sbVisible ? '<i class="bi bi-sliders"></i> Filters' : '<i class="bi bi-sliders"></i> Show Filters'; }
+    function toggleFG(btn) { const body = btn.closest('.fg').querySelector('.fg-body'); body.classList.toggle('collapsed'); btn.classList.toggle('open'); btn.classList.toggle('closed'); }
+
+    function openMF() { document.getElementById('mfBody').innerHTML = document.getElementById('sidebar').innerHTML; document.getElementById('mfDrawer').classList.add('open'); document.getElementById('mfOverlay').classList.add('open'); }
+    function closeMF() { document.getElementById('mfDrawer').classList.remove('open'); document.getElementById('mfOverlay').classList.remove('open'); }
+
+    function openQV(id, e) {
+      if (e) e.stopPropagation(); qvP = SALE.find(p => p.id === id); qvQty = 1; if (!qvP) return; const p = qvP;
+      document.getElementById('qvMainImg').src = p.img;
+      document.getElementById('qvCat').textContent = (p.mediumFull || p.medium) + ' · ' + p.cat;
+      document.getElementById('qvName').textContent = p.name;
+      document.getElementById('qvRating').innerHTML = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating) + ` <span>(${p.reviews} reviews)</span>`;
+      document.getElementById('qvPrice').innerHTML = p.oldPrice ? `<span class="oldp">₹${p.oldPrice.toLocaleString()}</span> <span class="salep">₹${p.price.toLocaleString()}</span>` : `₹${p.price.toLocaleString()}`;
+      document.getElementById('qvDesc').textContent = p.long;
+      document.getElementById('qvSizes').innerHTML = (p.sizes || []).map((s, i) => `<button class="sz-btn ${i === 0 ? 'active' : ''}" onclick="this.closest('.size-select').querySelectorAll('.sz-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">${s}</button>`).join('');
+      document.getElementById('qvQtyNum').textContent = 1;
+      const badgeEl = document.getElementById('qvBadge');
+      if (p.badge) { badgeEl.textContent = p.badge; badgeEl.className = `p-badge ${p.badgeClass}`; badgeEl.style.cssText = 'position:absolute;top:12px;left:12px;display:block;color:#fff;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;'; }
+      else badgeEl.style.display = 'none';
+      document.getElementById('qvThumbs').innerHTML = (p.thumbs || [p.img]).map((t, i) => `<img class="qv-thumb ${i === 0 ? 'active' : ''}" src="${t}" onclick="document.getElementById('qvMainImg').src='${p.img}';document.querySelectorAll('.qv-thumb').forEach(th=>th.classList.remove('active'));this.classList.add('active')" alt=""/>`).join('');
+      document.getElementById('qvOverlay').classList.add('open');
+    }
+    function closeQV() { document.getElementById('qvOverlay').classList.remove('open'); }
+    function chgQty(d) { qvQty = Math.max(1, qvQty + d); document.getElementById('qvQtyNum').textContent = qvQty; }
+    function addFromQV() { if (qvP) { addCart(qvP, qvQty); closeQV(); } }
+    function buyNowQV() { if (qvP) { addCart(qvP, qvQty); closeQV(); openPay(); } }
+
+    const getTotal = () => cart.reduce((s, i) => s + (i.price * i.qty), 0);
+    function addCart(p, qty = 1) { const ex = cart.find(i => i.id === p.id); ex ? ex.qty += qty : cart.push({ ...p, qty }); renderCart(); bumpBadge(); showToast(`"${p.name}" added ✓`); openCart(); }
+    function cQty(id, d) { const it = cart.find(i => i.id === id); if (!it) return; it.qty += d; if (it.qty <= 0) cRem(id); else renderCart(); }
+    function cRem(id) { cart = cart.filter(i => i.id !== id); renderCart(); }
+    function bumpBadge() { const el = document.getElementById('cartCount'); el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), 400); }
+    function openCart() { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('open'); }
+    function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); }
+    document.getElementById('cartBtn').addEventListener('click', openCart);
+    function renderCart() {
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartCount').textContent = count; document.getElementById('cartCount2').textContent = count;
+      document.getElementById('cartTotal').textContent = '₹' + getTotal().toLocaleString();
+      document.getElementById('payAmt').textContent = '₹' + getTotal().toLocaleString();
+      if (!cart.length) { document.getElementById('cartEmptyBox').style.display = 'block'; document.getElementById('cartItemsList').innerHTML = ''; document.getElementById('cartFoot').style.display = 'none'; }
+      else {
+        document.getElementById('cartEmptyBox').style.display = 'none'; document.getElementById('cartFoot').style.display = 'block';
+        document.getElementById('cartItemsList').innerHTML = cart.map(it => `<div class="cart-item"><img src="${it.img}" alt="${it.name}"/>
+      <div style="flex:1"><div class="ci-n">${it.name}</div><div class="ci-m">${it.desc}</div>
+      <div class="ci-qrow"><button class="ci-qbtn" onclick="cQty(${it.id},-1)">−</button><span style="font-size:13px;min-width:22px;text-align:center;">${it.qty}</span><button class="ci-qbtn" onclick="cQty(${it.id},1)">+</button></div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;"><button class="ci-rem" onclick="cRem(${it.id})">&times;</button><div class="ci-p">₹${(it.price * it.qty).toLocaleString()}</div></div></div>`).join('');
+      }
+    }
+
+    function openPay() { closeCart(); if (!cart.length) { showToast('Your bag is empty!'); return; } document.getElementById('payAmt').textContent = '₹' + getTotal().toLocaleString(); document.getElementById('payOverlay').classList.add('open'); document.getElementById('paySuccess').style.display = 'none'; document.getElementById('payBody').style.display = 'block'; }
+    function closePay() { document.getElementById('payOverlay').classList.remove('open'); }
+    function swTab(t, btn) { document.querySelectorAll('.pay-tab').forEach(b => b.classList.remove('active')); document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active')); btn.classList.add('active'); document.getElementById('panel-' + t).classList.add('active'); }
+    function selUPI(el) { document.querySelectorAll('.upi-app').forEach(a => a.classList.remove('sel')); el.classList.add('sel'); }
+    function fmtCard(inp) { let v = inp.value.replace(/\D/g, '').substring(0, 16); inp.value = v.replace(/(.{4})/g, '$1 ').trim(); }
+    function fmtExp(inp) { let v = inp.value.replace(/\D/g, ''); if (v.length >= 2) v = v.substring(0, 2) + ' / ' + v.substring(2, 4); inp.value = v; }
+    function processPay() { const b = document.getElementById('payBody'); b.innerHTML = '<div style="text-align:center;padding:50px 20px;"><div style="display:inline-block;width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:18px;"></div><p style="font-size:13px;color:var(--muted);">Processing securely…</p></div>'; setTimeout(() => { b.style.display = 'none'; document.getElementById('paySuccess').style.display = 'block'; cart = []; renderCart(); }, 2400); }
+    function payDone() { closePay(); }
+
+    document.getElementById('searchBtn').addEventListener('click', () => { document.getElementById('searchDrawer').classList.add('open'); setTimeout(() => document.getElementById('searchInput').focus(), 350); });
+    function closeSearch() { document.getElementById('searchDrawer').classList.remove('open'); document.getElementById('searchResults').classList.remove('show'); }
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const q = this.value.toLowerCase().trim(); const res = document.getElementById('searchResults');
+      if (!q) { res.classList.remove('show'); return; }
+      const m = SALE.filter(p => p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.medium.toLowerCase().includes(q) || p.tags.some(t => t.toLowerCase().includes(q)));
+      res.innerHTML = m.length ? m.map(p => `<div class="sri" onclick="openQV(${p.id});closeSearch()"><img src="${p.img}" alt="${p.name}"/><div><div class="sri-n">${p.name}</div><div class="sri-p">${p.medium} · ₹${p.price.toLocaleString()}</div></div></div>`).join('') : '<p style="font-size:13px;color:var(--muted);padding:12px 0;">No results found.</p>';
+      res.classList.add('show');
+    });
+
+    function toggleWish(btn, e) { if (e) e.stopPropagation(); const ic = btn.querySelector('i'); const was = ic.classList.contains('bi-heart-fill'); ic.className = was ? 'bi bi-heart' : 'bi bi-heart-fill'; btn.classList.toggle('faved', !was); showToast(was ? 'Removed from wishlist' : 'Saved to wishlist ♡'); }
+
+    document.getElementById('mobMenuBtn').addEventListener('click', () => { document.getElementById('mobNav').classList.add('open'); document.getElementById('mobOverlay').classList.add('open'); });
+    function closeMobNav() { document.getElementById('mobNav').classList.remove('open'); document.getElementById('mobOverlay').classList.remove('open'); }
+
+    window.addEventListener('scroll', () => { document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 60); document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400); });
+    document.getElementById('scrollTop').onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    function showToast(msg) { const w = document.getElementById('toastWrap'); const t = document.createElement('div'); t.className = 'toast-msg'; t.textContent = msg; w.appendChild(t); requestAnimationFrame(() => t.classList.add('show')); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000); }
+    function footerSub() { const v = document.getElementById('footerEmail').value; if (!v || !v.includes('@')) { showToast('Please enter a valid email.'); return; } showToast('Subscribed! 🎉'); document.getElementById('footerEmail').value = ''; }
+
+    const cur = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => { cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; setTimeout(() => { ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px'; }, 65); });
+    function bindCursor() { document.querySelectorAll('a,button,.product-card,.product-list-card,.cat-showcase-item,.sz-btn,.upi-app').forEach(el => { el.addEventListener('mouseenter', () => cur.classList.add('expand')); el.addEventListener('mouseleave', () => cur.classList.remove('expand')); }); }
+    bindCursor();
+
+    function handleResize() { const b = document.getElementById('mobMenuBtn'); b.style.display = window.innerWidth <= 768 ? 'flex' : 'none'; }
+    window.addEventListener('resize', handleResize); handleResize();
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSearch(); closeCart(); closeQV(); closePay(); closeMF(); } });
+
+    renderCart(); refresh();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "kalakar-store",
+  "version": "2.0.0",
+  "description": "Kalakar Handcrafted Arts & Woollens - Full Stack Ecommerce",
+  "main": "Backend/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node Backend/server.js",
+    "dev": "node Backend/server.js"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "nodemailer": "^6.9.16",
+    "razorpay": "^2.9.8"
+  }
+}
