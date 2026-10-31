@@ -1,0 +1,542 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Portal | Kalakar</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f5f0;
+      color: #30251f;
+    }
+
+    header {
+      background: #30251f;
+      color: white;
+      padding: 20px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 { margin: 0; letter-spacing: 2px; }
+
+    main {
+      max-width: 850px;
+      margin: 55px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px #0000000d;
+      margin-bottom: 20px;
+    }
+
+    h1 { margin-top: 0; font-size: 28px; }
+    p { line-height: 1.6; color: #76685e; }
+
+    label {
+      display: block;
+      margin: 17px 0 7px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd2c8;
+      border-radius: 6px;
+      font-size: 15px;
+      background: white;
+    }
+
+    textarea { min-height: 110px; resize: vertical; }
+
+    button {
+      padding: 13px 20px;
+      border: none;
+      border-radius: 6px;
+      background: #8b5e3c;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    button:hover { background: #70482c; }
+    button:disabled { opacity: .6; cursor: wait; }
+
+    .secondary {
+      background: transparent;
+      color: #8b5e3c;
+      padding-left: 0;
+    }
+
+    .hidden { display: none !important; }
+
+    .message {
+      padding: 13px;
+      border-radius: 6px;
+      margin-top: 15px;
+      background: #f2eee8;
+      color: #594638;
+      white-space: pre-line;
+    }
+
+    .error { background: #fff0ed; color: #a43d2d; }
+    .success { background: #edf7ee; color: #28613a; }
+
+    .status {
+      display: inline-block;
+      padding: 7px 13px;
+      border-radius: 30px;
+      background: #fff1d9;
+      color: #96610b;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .dashboard-item {
+      border: 1px solid #eee4db;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .dashboard-item h3 { margin-top: 0; }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    @media(max-width: 600px) {
+      main { margin: 20px auto; }
+      .card { padding: 22px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      header { padding: 18px 5%; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>KALAKAR</h2>
+  <div class="top-actions">
+    <span id="userLabel"></span>
+    <button id="logoutBtn" class="hidden">Logout</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- LOGIN -->
+  <section class="card hidden" id="loginSection">
+    <h1>Seller Portal</h1>
+    <p>Sign in to access your seller account or apply to become a Kalakar seller.</p>
+
+    <form id="loginForm">
+      <label>Email Address</label>
+      <input type="email" id="loginEmail" required>
+
+      <label>Password</label>
+      <input type="password" id="loginPassword" required>
+
+      <button type="submit">Sign In</button>
+    </form>
+
+    <button class="secondary" id="showRegister">
+      New to Kalakar? Create an account
+    </button>
+
+    <div id="loginMessage"></div>
+  </section>
+
+  <!-- REGISTER -->
+  <section class="card hidden" id="registerSection">
+    <h1>Create Your Seller Account</h1>
+    <p>Create an account first. You will verify your email before submitting your seller application.</p>
+
+    <form id="registerForm">
+      <label>Full Name</label>
+      <input type="text" id="registerName" required>
+
+      <label>Email Address</label>
+      <input type="email" id="registerEmail" required>
+
+      <label>Password</label>
+      <input type="password" id="registerPassword" minlength="6" required>
+
+      <button type="submit">Create Account</button>
+    </form>
+
+    <button class="secondary" id="showLogin">
+      Already have an account? Sign in
+    </button>
+
+    <div id="registerMessage"></div>
+  </section>
+
+  <!-- EMAIL OTP -->
+  <section class="card hidden" id="otpSection">
+    <h1>Verify Your Email</h1>
+    <p>Enter the six-digit verification code sent to your email address.</p>
+
+    <form id="otpForm">
+      <label>Verification Code</label>
+      <input type="text" id="otpCode" maxlength="6"
+             inputmode="numeric" pattern="[0-9]{6}" required>
+
+      <button type="submit">Verify Email</button>
+    </form>
+
+    <div id="otpMessage"></div>
+  </section>
+
+  <!-- SELLER APPLICATION -->
+  <section class="card hidden" id="applicationSection">
+    <h1>Become a Kalakar Seller</h1>
+    <p>Tell us about your business and the handcrafted products you want to sell.</p>
+
+    <div id="applicationNotice"></div>
+
+    <form id="applicationForm">
+      <label>Business / Brand Name</label>
+      <input type="text" id="businessName" required>
+
+      <label>Contact Number</label>
+      <input type="tel" id="sellerPhone" required>
+
+      <label>Product Category</label>
+      <select id="sellerCategory" required>
+        <option value="">Select category</option>
+        <option>Oil Painting</option>
+        <option>Woollen Wear</option>
+        <option>Acrylic Painting</option>
+        <option>Knit Wear</option>
+        <option>Watercolour</option>
+        <option>Handcrafted Gift</option>
+        <option>Other Handcrafted Products</option>
+      </select>
+
+      <label>Business Description</label>
+      <textarea id="sellerDescription"
+        placeholder="Tell us about your craft, products and experience..."
+        required></textarea>
+
+      <label>Business Address</label>
+      <textarea id="sellerAddress"
+        placeholder="Enter your business address"
+        required></textarea>
+
+      <button type="submit">Submit Application</button>
+    </form>
+
+    <div id="applicationMessage"></div>
+  </section>
+
+  <!-- PENDING -->
+  <section class="card hidden" id="pendingSection">
+    <h1>Application Under Review</h1>
+    <span class="status">Pending Approval</span>
+    <p>Your seller application has been submitted successfully.</p>
+    <p>Our team will review your business details. You will get seller dashboard access once your application is approved.</p>
+    <button id="checkStatusBtn">Refresh Status</button>
+  </section>
+
+  <!-- APPROVED SELLER DASHBOARD -->
+  <section class="card hidden" id="sellerDashboard">
+    <h1>Welcome to Your Seller Dashboard</h1>
+    <span class="status" style="background:#e5f5e9;color:#28613a;">
+      Approved Seller
+    </span>
+
+    <p id="sellerWelcome"></p>
+
+    <div class="dashboard-grid">
+      <div class="dashboard-item">
+        <h3>My Products</h3>
+        <p>Manage your product listings and inventory.</p>
+        <span>Product management coming next.</span>
+      </div>
+
+      <div class="dashboard-item">
+        <h3>My Orders</h3>
+        <p>View and manage orders containing your products.</p>
+        <span>Order management coming next.</span>
+      </div>
+
+      <div class="dashboard-item">
+        <h3>Inventory</h3>
+        <p>Keep track of your available stock.</p>
+        <span>Inventory tools coming next.</span>
+      </div>
+
+      <div class="dashboard-item">
+        <h3>Business Profile</h3>
+        <p>Review your submitted business information.</p>
+        <span id="businessProfile"></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const API = '';
+let authToken = localStorage.getItem('kalakar_token');
+let pendingEmail = '';
+
+const sections = [
+  'loginSection',
+  'registerSection',
+  'otpSection',
+  'applicationSection',
+  'pendingSection',
+  'sellerDashboard'
+];
+
+function showSection(id) {
+  sections.forEach(section => {
+    document.getElementById(section).classList.toggle(
+      'hidden', section !== id
+    );
+  });
+}
+
+function message(id, text, type = 'error') {
+  const element = document.getElementById(id);
+  element.className = 'message ' + type;
+  element.textContent = text;
+}
+
+function clearMessages() {
+  document.querySelectorAll('.message').forEach(el => {
+    el.textContent = '';
+    el.className = '';
+  });
+}
+
+async function api(path, method = 'GET', body = null) {
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (authToken) {
+    headers.Authorization = 'Bearer ' + authToken;
+  }
+
+  const options = { method, headers };
+
+  if (body) options.body = JSON.stringify(body);
+
+  const response = await fetch(API + path, options);
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Something went wrong.');
+  }
+
+  return data;
+}
+
+function setLoggedIn(name) {
+  document.getElementById('logoutBtn').classList.remove('hidden');
+  document.getElementById('userLabel').textContent = name || '';
+}
+
+function logout() {
+  localStorage.removeItem('kalakar_token');
+  authToken = null;
+  document.getElementById('logoutBtn').classList.add('hidden');
+  document.getElementById('userLabel').textContent = '';
+  showSection('loginSection');
+}
+
+document.getElementById('logoutBtn').addEventListener('click', logout);
+
+document.getElementById('showRegister').addEventListener('click', () => {
+  clearMessages();
+  showSection('registerSection');
+});
+
+document.getElementById('showLogin').addEventListener('click', () => {
+  clearMessages();
+  showSection('loginSection');
+});
+
+// LOGIN
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  clearMessages();
+
+  try {
+    const data = await api('/api/users/login', 'POST', {
+      email: document.getElementById('loginEmail').value.trim(),
+      password: document.getElementById('loginPassword').value
+    });
+
+    if (data.user && data.user.isAdmin) {
+      throw new Error('Please use the separate admin login page.');
+    }
+
+    authToken = data.token;
+    localStorage.setItem('kalakar_token', authToken);
+    setLoggedIn(data.user.name);
+    await loadSellerPortal();
+  } catch (err) {
+    message('loginMessage', err.message);
+  }
+});
+
+// REGISTER
+document.getElementById('registerForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  clearMessages();
+
+  try {
+    const data = await api('/api/users/register', 'POST', {
+      name: document.getElementById('registerName').value.trim(),
+      email: document.getElementById('registerEmail').value.trim(),
+      password: document.getElementById('registerPassword').value
+    });
+
+    pendingEmail = data.email;
+    message('registerMessage', data.message, 'success');
+    showSection('otpSection');
+  } catch (err) {
+    message('registerMessage', err.message);
+  }
+});
+
+// OTP VERIFICATION
+document.getElementById('otpForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  clearMessages();
+
+  try {
+    const data = await api('/api/users/verify-otp', 'POST', {
+      email: pendingEmail,
+      otp: document.getElementById('otpCode').value.trim()
+    });
+
+    authToken = data.token;
+    localStorage.setItem('kalakar_token', authToken);
+    setLoggedIn(data.user.name);
+    await loadSellerPortal();
+  } catch (err) {
+    message('otpMessage', err.message);
+  }
+});
+
+// LOAD THE CORRECT PORTAL VIEW
+async function loadSellerPortal() {
+  clearMessages();
+
+  try {
+    const data = await api('/api/users/seller-status');
+
+    if (data.sellerStatus === 'approved') {
+      showSection('sellerDashboard');
+
+      const application = data.application || {};
+      document.getElementById('sellerWelcome').textContent =
+        'Your seller account for ' +
+        (application.businessName || 'your business') +
+        ' is active.';
+
+      document.getElementById('businessProfile').textContent =
+        application.category || 'Business profile';
+      return;
+    }
+
+    if (data.sellerStatus === 'pending') {
+      showSection('pendingSection');
+      return;
+    }
+
+    showSection('applicationSection');
+
+    if (data.application) {
+      document.getElementById('businessName').value =
+        data.application.businessName || '';
+      document.getElementById('sellerPhone').value =
+        data.application.phone || '';
+      document.getElementById('sellerCategory').value =
+        data.application.category || '';
+      document.getElementById('sellerDescription').value =
+        data.application.description || '';
+      document.getElementById('sellerAddress').value =
+        data.application.address || '';
+
+      if (data.sellerStatus === 'rejected') {
+        message(
+          'applicationNotice',
+          'Your previous application was rejected. You can update your details and apply again.',
+          'error'
+        );
+      }
+    }
+  } catch (err) {
+    localStorage.removeItem('kalakar_token');
+    authToken = null;
+    showSection('loginSection');
+    message('loginMessage', err.message);
+  }
+}
+
+// SUBMIT SELLER APPLICATION
+document.getElementById('applicationForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  clearMessages();
+
+  const body = {
+    businessName: document.getElementById('businessName').value.trim(),
+    phone: document.getElementById('sellerPhone').value.trim(),
+    category: document.getElementById('sellerCategory').value,
+    description: document.getElementById('sellerDescription').value.trim(),
+    address: document.getElementById('sellerAddress').value.trim()
+  };
+
+  try {
+    const data = await api('/api/users/seller-application', 'POST', body);
+    message('applicationMessage', data.message, 'success');
+    await loadSellerPortal();
+  } catch (err) {
+    message('applicationMessage', err.message);
+  }
+});
+
+// REFRESH APPLICATION STATUS
+document.getElementById('checkStatusBtn').addEventListener(
+  'click', loadSellerPortal
+);
+
+// INITIAL PAGE LOAD
+if (authToken) {
+  loadSellerPortal();
+} else {
+  showSection('loginSection');
+}
+</script>
+
+</body>
+</html>
