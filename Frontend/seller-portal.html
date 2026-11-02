@@ -135,6 +135,153 @@
       .dashboard-grid { grid-template-columns: 1fr; }
       header { padding: 18px 5%; }
     }
+    
+/* SELLER DASHBOARD */
+
+.seller-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 28px;
+}
+
+.seller-eyebrow {
+  color: #a36c42;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.seller-heading h1 {
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+.seller-layout {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 22px;
+}
+
+.seller-sidebar {
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  height: fit-content;
+  border: 1px solid #eee4db;
+}
+
+.seller-nav {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: #594638;
+  border: none;
+  padding: 13px;
+  margin: 3px 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.seller-nav.active,
+.seller-nav:hover {
+  background: #f5ede5;
+  color: #8b5e3c;
+}
+
+.seller-content {
+  background: white;
+  border: 1px solid #eee4db;
+  border-radius: 10px;
+  padding: 28px;
+  min-height: 350px;
+}
+
+.seller-panel h2 {
+  font-size: 23px;
+  margin-bottom: 8px;
+}
+
+.seller-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.seller-stat {
+  border: 1px solid #eee4db;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.seller-stat span {
+  display: block;
+  color: #76685e;
+  font-size: 13px;
+}
+
+.seller-stat strong {
+  display: block;
+  font-size: 22px;
+  margin-top: 12px;
+}
+
+.approved-text {
+  color: #287644;
+}
+
+.seller-welcome,
+.seller-empty {
+  background: #faf6f1;
+  border-radius: 8px;
+  padding: 22px;
+  margin-top: 20px;
+}
+
+.seller-profile {
+  margin-top: 22px;
+  line-height: 2.5;
+}
+
+.seller-profile p {
+  border-bottom: 1px solid #eee4db;
+  padding: 8px 0;
+}
+
+@media(max-width: 650px) {
+  .seller-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .seller-sidebar {
+    display: flex;
+    overflow-x: auto;
+    gap: 5px;
+  }
+
+  .seller-nav {
+    white-space: nowrap;
+    width: auto;
+  }
+
+  .seller-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .seller-content {
+    padding: 18px;
+  }
+
+  .seller-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
   </style>
 </head>
 
@@ -175,8 +322,7 @@
   <!-- REGISTER -->
   <section class="card hidden" id="registerSection">
     <h1>Create Your Seller Account</h1>
-    <p>Create an account first. You will verify your email before submitting your seller application.</p>
-
+<p>Create your seller account and submit your business application for admin approval.</p>
     <form id="registerForm">
       <label>Full Name</label>
       <input type="text" id="registerName" required>
@@ -195,22 +341,6 @@
     </button>
 
     <div id="registerMessage"></div>
-  </section>
-
-  <!-- EMAIL OTP -->
-  <section class="card hidden" id="otpSection">
-    <h1>Verify Your Email</h1>
-    <p>Enter the six-digit verification code sent to your email address.</p>
-
-    <form id="otpForm">
-      <label>Verification Code</label>
-      <input type="text" id="otpCode" maxlength="6"
-             inputmode="numeric" pattern="[0-9]{6}" required>
-
-      <button type="submit">Verify Email</button>
-    </form>
-
-    <div id="otpMessage"></div>
   </section>
 
   <!-- SELLER APPLICATION -->
@@ -264,53 +394,124 @@
     <button id="checkStatusBtn">Refresh Status</button>
   </section>
 
-  <!-- APPROVED SELLER DASHBOARD -->
-  <section class="card hidden" id="sellerDashboard">
-    <h1>Welcome to Your Seller Dashboard</h1>
-    <span class="status" style="background:#e5f5e9;color:#28613a;">
-      Approved Seller
-    </span>
 
-    <p id="sellerWelcome"></p>
+<!-- APPROVED SELLER DASHBOARD -->
+<section id="sellerDashboard" class="hidden">
 
-    <div class="dashboard-grid">
-      <div class="dashboard-item">
-        <h3>My Products</h3>
-        <p>Manage your product listings and inventory.</p>
-        <span>Product management coming next.</span>
-      </div>
-
-      <div class="dashboard-item">
-        <h3>My Orders</h3>
-        <p>View and manage orders containing your products.</p>
-        <span>Order management coming next.</span>
-      </div>
-
-      <div class="dashboard-item">
-        <h3>Inventory</h3>
-        <p>Keep track of your available stock.</p>
-        <span>Inventory tools coming next.</span>
-      </div>
-
-      <div class="dashboard-item">
-        <h3>Business Profile</h3>
-        <p>Review your submitted business information.</p>
-        <span id="businessProfile"></span>
-      </div>
+  <div class="seller-heading">
+    <div>
+      <p class="seller-eyebrow">KALAKAR SELLER PORTAL</p>
+      <h1>Seller Dashboard</h1>
+      <p id="sellerWelcome">Welcome to your business dashboard.</p>
     </div>
-  </section>
+    <span class="status approved">Approved Seller</span>
+  </div>
+
+  <div class="seller-layout">
+
+    <aside class="seller-sidebar">
+      <button class="seller-nav active" data-panel="overviewPanel">
+        Overview
+      </button>
+      <button class="seller-nav" data-panel="productsPanel">
+        My Products
+      </button>
+      <button class="seller-nav" data-panel="ordersPanel">
+        My Orders
+      </button>
+      <button class="seller-nav" data-panel="profilePanel">
+        My Profile
+      </button>
+    </aside>
+
+    <div class="seller-content">
+
+      <!-- OVERVIEW -->
+      <div class="seller-panel" id="overviewPanel">
+        <h2>Overview</h2>
+        <p>Here's a quick look at your seller account.</p>
+
+        <div class="seller-stats">
+          <div class="seller-stat">
+            <span>My Products</span>
+            <strong>—</strong>
+          </div>
+
+          <div class="seller-stat">
+            <span>My Orders</span>
+            <strong>—</strong>
+          </div>
+
+          <div class="seller-stat">
+            <span>Account Status</span>
+            <strong class="approved-text">Approved</strong>
+          </div>
+        </div>
+
+        <div class="seller-welcome">
+          <h3>Welcome to Kalakar!</h3>
+          <p>
+            Your seller account is approved. You can now manage
+            your products, track orders and update your business profile.
+          </p>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="seller-panel hidden" id="productsPanel">
+        <h2>My Products</h2>
+        <p>Manage the products listed under your business.</p>
+
+        <div class="seller-empty">
+          <h3>Product management</h3>
+          <p>Your product listings will appear here.</p>
+          <p>We'll connect the Add Product and Edit Product features next.</p>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="seller-panel hidden" id="ordersPanel">
+        <h2>My Orders</h2>
+        <p>Keep track of orders containing your products.</p>
+
+        <div class="seller-empty">
+          <h3>No orders to display yet</h3>
+          <p>Your customer orders will appear here once connected.</p>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="seller-panel hidden" id="profilePanel">
+        <h2>Business Profile</h2>
+        <p>Your approved business information.</p>
+
+        <div class="seller-profile">
+          <p><strong>Business:</strong>
+            <span id="businessProfile"></span>
+          </p>
+          <p><strong>Category:</strong>
+            <span id="profileCategory">—</span>
+          </p>
+          <p><strong>Account Status:</strong>
+            <span class="approved-text">Approved</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 </main>
 
 <script>
 const API = '';
 let authToken = localStorage.getItem('kalakar_token');
-let pendingEmail = '';
+
 
 const sections = [
   'loginSection',
   'registerSection',
-  'otpSection',
   'applicationSection',
   'pendingSection',
   'sellerDashboard'
@@ -407,45 +608,38 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
   }
 });
 
-// REGISTER
+
+// REGISTER SELLER WITHOUT OTP
 document.getElementById('registerForm').addEventListener('submit', async e => {
   e.preventDefault();
   clearMessages();
 
   try {
-    const data = await api('/api/users/register', 'POST', {
+    const data = await api('/api/users/seller-register', 'POST', {
       name: document.getElementById('registerName').value.trim(),
       email: document.getElementById('registerEmail').value.trim(),
       password: document.getElementById('registerPassword').value
     });
 
-    pendingEmail = data.email;
-    message('registerMessage', data.message, 'success');
-    showSection('otpSection');
+    // Save the new seller's login token
+    authToken = data.token;
+    localStorage.setItem('kalakar_token', authToken);
+
+    setLoggedIn(data.user.name);
+
+    message(
+      'registerMessage',
+      'Seller account created successfully! Please complete your business application.',
+      'success'
+    );
+
+    await loadSellerPortal();
+
   } catch (err) {
     message('registerMessage', err.message);
   }
 });
 
-// OTP VERIFICATION
-document.getElementById('otpForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  clearMessages();
-
-  try {
-    const data = await api('/api/users/verify-otp', 'POST', {
-      email: pendingEmail,
-      otp: document.getElementById('otpCode').value.trim()
-    });
-
-    authToken = data.token;
-    localStorage.setItem('kalakar_token', authToken);
-    setLoggedIn(data.user.name);
-    await loadSellerPortal();
-  } catch (err) {
-    message('otpMessage', err.message);
-  }
-});
 
 // LOAD THE CORRECT PORTAL VIEW
 async function loadSellerPortal() {
@@ -455,18 +649,23 @@ async function loadSellerPortal() {
     const data = await api('/api/users/seller-status');
 
     if (data.sellerStatus === 'approved') {
-      showSection('sellerDashboard');
+  showSection('sellerDashboard');
 
-      const application = data.application || {};
-      document.getElementById('sellerWelcome').textContent =
-        'Your seller account for ' +
-        (application.businessName || 'your business') +
-        ' is active.';
+  const application = data.application || {};
 
-      document.getElementById('businessProfile').textContent =
-        application.category || 'Business profile';
-      return;
-    }
+  document.getElementById('sellerWelcome').textContent =
+    'Your seller account for ' +
+    (application.businessName || 'your business') +
+    ' is active.';
+
+  document.getElementById('businessProfile').textContent =
+    application.category || 'Business profile';
+
+  document.getElementById('profileCategory').textContent =
+    application.category || 'Not provided';
+
+  return;
+}
 
     if (data.sellerStatus === 'pending') {
       showSection('pendingSection');
@@ -529,6 +728,26 @@ document.getElementById('applicationForm').addEventListener('submit', async e =>
 document.getElementById('checkStatusBtn').addEventListener(
   'click', loadSellerPortal
 );
+
+/* SELLER DASHBOARD NAVIGATION */
+
+document.querySelectorAll('.seller-nav').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.seller-nav').forEach(nav => {
+      nav.classList.remove('active');
+    });
+
+    document.querySelectorAll('.seller-panel').forEach(panel => {
+      panel.classList.add('hidden');
+    });
+
+    button.classList.add('active');
+
+    document.getElementById(
+      button.dataset.panel
+    ).classList.remove('hidden');
+  });
+});
 
 // INITIAL PAGE LOAD
 if (authToken) {

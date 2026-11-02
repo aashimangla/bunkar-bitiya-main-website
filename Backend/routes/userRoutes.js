@@ -103,6 +103,91 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// POST /api/users/seller-register
+// Seller registration without email OTP verification.
+
+router.post('/seller-register', (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({
+      error: 'Name, email and password are required'
+    });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({
+      error: 'Password must be at least 6 characters'
+    });
+  }
+
+  const emailLower = email.toLowerCase().trim();
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLower)) {
+    return res.status(400).json({
+      error: 'Please enter a valid email address'
+    });
+  }
+
+  try {
+    const user = withDb(db => {
+      const existing = db.users.find(
+        u => u.email === emailLower
+      );
+
+      if (existing) {
+        throw {
+          status: 409,
+          message: 'An account with this email already exists. Please sign in.'
+        };
+      }
+
+      const { hash, salt } = hashPassword(password);
+
+      const newUser = {
+        id: generateId(),
+        name: name.trim(),
+        email: emailLower,
+        passwordHash: hash,
+        salt,
+        isAdmin: false,
+        isBlocked: false,
+        isVerified: true,
+        sellerStatus: 'not_applied',
+        createdAt: new Date().toISOString()
+      };
+
+      db.users.push(newUser);
+      return newUser;
+    });
+
+    const token = signToken({
+      userId: user.id,
+      email: user.email,
+      name: user.name
+    });
+
+    res.status(201).json({
+      message: 'Seller account created successfully!',
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        isAdmin: false
+      }
+    });
+
+  } catch (e) {
+    if (e.status) {
+      return res.status(e.status).json({ error: e.message });
+    }
+
+    console.error('[Seller registration]', e);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // POST /api/users/verify-otp
 // Confirms the emailed code and, on success, activates the account and
 // returns a login token — this is the only place a token is issued after signup.
