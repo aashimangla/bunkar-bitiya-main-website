@@ -282,6 +282,100 @@
   }
 }
 
+/* SELLER PRODUCT MANAGEMENT */
+
+.products-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.products-heading h2 {
+  margin-bottom: 5px;
+}
+
+.product-form-container {
+  background: #faf6f1;
+  border: 1px solid #eee4db;
+  border-radius: 10px;
+  padding: 22px;
+  margin: 20px 0;
+}
+
+.product-form-container h3 {
+  margin-top: 0;
+}
+
+.product-form-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.product-card {
+  border: 1px solid #eee4db;
+  border-radius: 9px;
+  overflow: hidden;
+  background: white;
+}
+
+.product-card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  background: #f5ede5;
+}
+
+.product-card-content {
+  padding: 15px;
+}
+
+.product-card-content h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.product-card-content p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.product-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.product-card-actions button {
+  flex: 1;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.delete-product-btn {
+  background: #a43d2d;
+}
+
+.delete-product-btn:hover {
+  background: #812c20;
+}
+
+@media(max-width: 500px) {
+  .products-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
   </style>
 </head>
 
@@ -434,7 +528,7 @@
         <div class="seller-stats">
           <div class="seller-stat">
             <span>My Products</span>
-            <strong>—</strong>
+<strong id="myProductCount">0</strong>
           </div>
 
           <div class="seller-stat">
@@ -457,17 +551,74 @@
         </div>
       </div>
 
-      <!-- PRODUCTS -->
-      <div class="seller-panel hidden" id="productsPanel">
-        <h2>My Products</h2>
-        <p>Manage the products listed under your business.</p>
+      
+<!-- PRODUCTS -->
+<div class="seller-panel hidden" id="productsPanel">
+  <div class="products-heading">
+    <div>
+      <h2>My Products</h2>
+      <p>Manage the products listed under your business.</p>
+    </div>
+    <button type="button" id="addProductBtn">+ Add Product</button>
+  </div>
 
-        <div class="seller-empty">
-          <h3>Product management</h3>
-          <p>Your product listings will appear here.</p>
-          <p>We'll connect the Add Product and Edit Product features next.</p>
-        </div>
+  <div id="productMessage"></div>
+
+  <!-- ADD / EDIT PRODUCT FORM -->
+  <div id="productFormContainer" class="product-form-container hidden">
+    <h3 id="productFormTitle">Add New Product</h3>
+
+    <form id="productForm">
+      <label>Product Name</label>
+      <input type="text" id="productName" required>
+
+      <label>Category</label>
+      <select id="productCategory" required>
+        <option value="">Select category</option>
+        <option>Oil Painting</option>
+        <option>Woollen Wear</option>
+        <option>Acrylic Painting</option>
+        <option>Knit Wear</option>
+        <option>Watercolour</option>
+        <option>Handcrafted Gift</option>
+        <option>Other Handcrafted Products</option>
+      </select>
+
+      <label>Description</label>
+      <textarea id="productDescription" required></textarea>
+
+      <label>Price (₹)</label>
+      <input type="number" id="productPrice" min="1" step="0.01" required>
+
+      <label>Old Price (₹) – Optional</label>
+      <input type="number" id="productOldPrice" min="1" step="0.01">
+
+      <label>Product Image URL or Image Path</label>
+      <input type="text" id="productImage"
+        placeholder="assets/images/product.jpg">
+
+      <label>Available Sizes (comma separated)</label>
+      <input type="text" id="productSizes"
+        placeholder="S, M, L, XL">
+
+      <label>Stock Quantity</label>
+      <input type="number" id="productStock" min="0" step="1" value="0" required>
+
+      <div class="product-form-actions">
+        <button type="submit" id="saveProductBtn">Save Product</button>
+        <button type="button" class="secondary" id="cancelProductBtn">
+          Cancel
+        </button>
       </div>
+    </form>
+  </div>
+
+  <!-- PRODUCT LIST -->
+  <div id="sellerProductsList">
+    <p>Loading products...</p>
+  </div>
+</div>
+
 
       <!-- ORDERS -->
       <div class="seller-panel hidden" id="ordersPanel">
@@ -748,6 +899,256 @@ document.querySelectorAll('.seller-nav').forEach(button => {
     ).classList.remove('hidden');
   });
 });
+
+/* =====================================
+   SELLER PRODUCT MANAGEMENT
+===================================== */
+
+let editingProductId = null;
+
+// Load products belonging to the logged-in seller.
+async function loadSellerProducts() {
+  const container = document.getElementById('sellerProductsList');
+
+  container.innerHTML = '<p>Loading your products...</p>';
+
+  try {
+    const products = await api('/api/seller/products');
+
+    document.getElementById('myProductCount').textContent =
+      products.length;
+
+    if (!products.length) {
+      container.innerHTML = `
+        <div class="seller-empty">
+          <h3>No products listed yet</h3>
+          <p>Start adding your handcrafted products to Kalakar.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="product-list">
+        ${products.map(product => `
+          <div class="product-card">
+            <img
+              src="${escapeProductHTML(product.img || '')}"
+              alt="${escapeProductHTML(product.name)}"
+              onerror="this.style.display='none'"
+            >
+
+            <div class="product-card-content">
+              <h3>${escapeProductHTML(product.name)}</h3>
+
+              <p>
+                <strong>Category:</strong>
+                ${escapeProductHTML(product.category)}
+              </p>
+
+              <p>
+                <strong>Price:</strong>
+                ₹${Number(product.price).toLocaleString('en-IN')}
+              </p>
+
+              <p>
+                <strong>Stock:</strong>
+                ${Number(product.stock) || 0}
+              </p>
+
+              <div class="product-card-actions">
+                <button
+                  type="button"
+                  onclick="editSellerProduct('${encodeURIComponent(product.id)}')"
+                >Edit</button>
+
+                <button
+                  type="button"
+                  class="delete-product-btn"
+                  onclick="deleteSellerProduct('${encodeURIComponent(product.id)}')"
+                >Delete</button>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+  } catch (error) {
+    container.innerHTML = `
+      <div class="message error">
+        ${escapeProductHTML(error.message)}
+      </div>
+    `;
+  }
+}
+
+// Escape text before displaying product data in HTML.
+function escapeProductHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[char]);
+}
+
+// Open a blank form for adding a product.
+document.getElementById('addProductBtn').addEventListener('click', () => {
+  editingProductId = null;
+
+  document.getElementById('productForm').reset();
+  document.getElementById('productFormTitle').textContent =
+    'Add New Product';
+
+  document.getElementById('saveProductBtn').textContent =
+    'Save Product';
+
+  document.getElementById('productFormContainer')
+    .classList.remove('hidden');
+
+  document.getElementById('productMessage').innerHTML = '';
+
+  document.getElementById('productFormContainer')
+    .scrollIntoView({ behavior: 'smooth' });
+});
+
+// Cancel adding or editing.
+document.getElementById('cancelProductBtn').addEventListener('click', () => {
+  editingProductId = null;
+
+  document.getElementById('productForm').reset();
+
+  document.getElementById('productFormContainer')
+    .classList.add('hidden');
+});
+
+// Add or update product.
+document.getElementById('productForm').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const saveButton = document.getElementById('saveProductBtn');
+  saveButton.disabled = true;
+
+  const body = {
+    name: document.getElementById('productName').value.trim(),
+    category: document.getElementById('productCategory').value,
+    desc: document.getElementById('productDescription').value.trim(),
+    price: document.getElementById('productPrice').value,
+    oldPrice: document.getElementById('productOldPrice').value || null,
+    img: document.getElementById('productImage').value.trim(),
+    sizes: document.getElementById('productSizes').value,
+    stock: document.getElementById('productStock').value
+  };
+
+  try {
+    if (editingProductId) {
+      await api(
+        `/api/seller/products/${encodeURIComponent(editingProductId)}`,
+        'PUT',
+        body
+      );
+
+      message(
+        'productMessage',
+        'Product updated successfully!',
+        'success'
+      );
+    } else {
+      await api('/api/seller/products', 'POST', body);
+
+      message(
+        'productMessage',
+        'Product added successfully!',
+        'success'
+      );
+    }
+
+    editingProductId = null;
+
+    document.getElementById('productForm').reset();
+    document.getElementById('productFormContainer')
+      .classList.add('hidden');
+
+    await loadSellerProducts();
+
+  } catch (error) {
+    message('productMessage', error.message);
+  } finally {
+    saveButton.disabled = false;
+  }
+});
+
+// Load a product into the form for editing.
+async function editSellerProduct(encodedId) {
+  const productId = decodeURIComponent(encodedId);
+
+  try {
+    const products = await api('/api/seller/products');
+
+    const product = products.find(p => p.id === productId);
+
+    if (!product) {
+      throw new Error('Product not found.');
+    }
+
+    editingProductId = product.id;
+
+    document.getElementById('productName').value = product.name || '';
+    document.getElementById('productCategory').value = product.category || '';
+    document.getElementById('productDescription').value = product.desc || '';
+    document.getElementById('productPrice').value = product.price ?? '';
+    document.getElementById('productOldPrice').value =
+      product.oldPrice ?? '';
+    document.getElementById('productImage').value = product.img || '';
+    document.getElementById('productSizes').value =
+      Array.isArray(product.sizes) ? product.sizes.join(', ') : '';
+    document.getElementById('productStock').value = product.stock ?? 0;
+
+    document.getElementById('productFormTitle').textContent =
+      'Edit Product';
+
+    document.getElementById('saveProductBtn').textContent =
+      'Update Product';
+
+    document.getElementById('productFormContainer')
+      .classList.remove('hidden');
+
+    document.getElementById('productFormContainer')
+      .scrollIntoView({ behavior: 'smooth' });
+
+  } catch (error) {
+    message('productMessage', error.message);
+  }
+}
+
+// Delete a product.
+async function deleteSellerProduct(encodedId) {
+  const productId = decodeURIComponent(encodedId);
+
+  if (!confirm('Are you sure you want to delete this product?')) {
+    return;
+  }
+
+  try {
+    await api(
+      `/api/seller/products/${encodeURIComponent(productId)}`,
+      'DELETE'
+    );
+
+    message(
+      'productMessage',
+      'Product deleted successfully!',
+      'success'
+    );
+
+    await loadSellerProducts();
+
+  } catch (error) {
+    message('productMessage', error.message);
+  }
+}
 
 // INITIAL PAGE LOAD
 if (authToken) {
