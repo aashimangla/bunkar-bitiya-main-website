@@ -4421,7 +4421,7 @@
         }
 
         /* ═══ PRODUCT DATA ═══ */
-        const products = [
+        let products = [
             { id: 1, name: 'Himalayan Mountain Relief', cat: 'Mixed Media', desc: '2.5×4.5 ft · Cement, glue & acrylic on MDF board', price: 12500, img: 'assets/images/paintings/divya/himalayan-mountain-relief.jpg', badge: 'New', sizes: ['2.5×4.5 ft'], rating: 5, reviews: 6 },
             { id: 2, name: 'Peacock Floral Madhubani', cat: 'Gouache Painting', desc: 'A4 · Poster colours on paper', price: 500, img: 'assets/images/paintings/divya/peacock-floral-madhubani.jpg', badge: 'Bestseller', badgeClass: 'pb-dark', sizes: ['A4'], rating: 5, reviews: 12 },
             { id: 3, name: 'Rainbow Mandala', cat: 'Watercolour', desc: 'A3 · Poster colour & watercolour wash on paper', price: 350, img: 'assets/images/paintings/divya/rainbow-mandala.jpg', badge: 'New', sizes: ['A3'], rating: 5, reviews: 9 },
@@ -4436,40 +4436,181 @@
             { id: 12, name: 'Moonlit Peaks', cat: 'Watercolour', desc: 'Watercolour on cotton paper · 14×20 in', price: 3100, img: 'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=600&q=80', sizes: ['14×20', '21×30'], rating: 5, reviews: 19 }
         ];
 
-        function pCard(p, d = 0) {
-            const price = p.oldPrice ? `<span class="old-price">₹${p.oldPrice.toLocaleString()}</span><span class="sale">₹${p.price.toLocaleString()}</span>` : `₹${p.price.toLocaleString()}`;
-            const badge = p.badge ? `<span class="product-badge ${p.badgeClass || ''}">${p.badge}</span>` : '';
-            const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
-            return `<div class="product-card reveal d${d}" data-id="${p.id}">
-    <div class="product-img-wrap">
-      <img src="${p.img}" alt="${p.name}" loading="lazy"/>
-      ${badge}
-      <button class="product-wishlist" onclick="toggleWish(this,event)"><i class="bi bi-heart"></i></button>
-      <button class="quick-add" onclick="openQV(${p.id},event)">Quick View</button>
-    </div>
-    <div class="product-info">
-      <div class="product-rating">${stars} <span style="color:var(--muted);font-size:11px;">(${p.reviews})</span></div>
-      <div class="product-name">${p.name}</div>
-      <div class="product-desc">${p.desc}</div>
-      <div class="product-price">${price}</div>
-    </div>
-  </div>`;
+        
+/* ==========================================
+   DYNAMIC PRODUCT CATALOG
+========================================== */
+
+const staticProducts = products.slice();
+
+function escapeCatalogHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[char]);
+}
+
+function pCard(p, d = 0) {
+    const priceValue = Number(p.price) || 0;
+    const oldPriceValue = Number(p.oldPrice) || 0;
+    const rating = Math.max(0, Math.min(5, Number(p.rating) || 0));
+
+    const price = oldPriceValue
+        ? `<span class="old-price">₹${oldPriceValue.toLocaleString('en-IN')}</span>
+           <span class="sale">₹${priceValue.toLocaleString('en-IN')}</span>`
+        : `₹${priceValue.toLocaleString('en-IN')}`;
+
+    const badge = p.badge
+        ? `<span class="product-badge">${escapeCatalogHTML(p.badge)}</span>`
+        : '';
+
+    const stars = rating
+        ? '★'.repeat(rating) + '☆'.repeat(5 - rating)
+        : 'NEW ARRIVAL';
+
+    const safeId = encodeURIComponent(String(p.id)).replace(/'/g, '%27');
+
+    return `
+    <div class="product-card reveal d${d}" data-id="${escapeCatalogHTML(p.id)}">
+        <div class="product-img-wrap">
+            <img
+                src="${escapeCatalogHTML(p.img)}"
+                alt="${escapeCatalogHTML(p.name)}"
+                loading="lazy"
+                onerror="this.style.display='none'"
+            />
+
+            ${badge}
+
+            <button class="product-wishlist"
+                onclick="toggleWish(this,event)">
+                <i class="bi bi-heart"></i>
+            </button>
+
+            <button class="quick-add"
+                onclick="openQV(decodeURIComponent('${safeId}'),event)">
+                Quick View
+            </button>
+        </div>
+
+        <div class="product-info">
+            <div class="product-rating">
+                ${stars}
+                ${rating ? `<span style="color:var(--muted);font-size:11px;">(${Number(p.reviews) || 0})</span>` : ''}
+            </div>
+
+            <div class="product-name">${escapeCatalogHTML(p.name)}</div>
+            <div class="product-desc">${escapeCatalogHTML(p.desc)}</div>
+            <div class="product-price">${price}</div>
+        </div>
+    </div>`;
+}
+
+// Render homepage product sections.
+function renderProductSections() {
+    const latestProducts = products.slice(0, 4);
+
+    document.getElementById('newArrivals').innerHTML =
+        latestProducts.map((p, i) => pCard(p, (i % 4) + 1)).join('');
+
+    const woollenProducts = products.filter(p =>
+        /wool|knit/i.test(p.cat || '')
+    );
+
+    const displayedWoollens = woollenProducts.length
+        ? woollenProducts.slice(0, 4)
+        : products.slice(4, 8);
+
+    document.getElementById('woollenGrid').innerHTML =
+        displayedWoollens.map((p, i) => pCard(p, (i % 4) + 1)).join('');
+}
+
+// Initially display existing products.
+renderProductSections();
+
+// Fetch products saved in the backend.
+async function loadStoreProducts() {
+    try {
+        const response = await fetch('/api/products');
+
+        if (!response.ok) {
+            throw new Error('Could not load products from the server.');
         }
 
-        document.getElementById('newArrivals').innerHTML = products.slice(0, 4).map((p, i) => pCard(p, i + 1)).join('');
-        document.getElementById('woollenGrid').innerHTML = products.slice(4, 8).map((p, i) => pCard(p, i + 1)).join('');
+        const apiProducts = await response.json();
+
+        const databaseProducts = apiProducts.map(p => ({
+            id: String(p.id),
+            name: p.name || 'Handcrafted Product',
+            cat: p.category || p.cat || 'Handcrafted',
+            desc: p.desc || '',
+            price: Number(p.price) || 0,
+            oldPrice: p.oldPrice ? Number(p.oldPrice) : null,
+            img: p.img || '',
+            badge: p.badge || null,
+            sizes: Array.isArray(p.sizes) ? p.sizes : [],
+            rating: Number(p.rating) || 0,
+            reviews: Number(p.reviews) || 0,
+            createdAt: p.createdAt || null
+        }));
+
+        // Show newest database products first.
+        databaseProducts.sort((a, b) =>
+            new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        );
+
+        // Avoid displaying a static product twice if it also exists in the DB.
+        const databaseNames = new Set(
+            databaseProducts.map(p => p.name.trim().toLowerCase())
+        );
+
+        const remainingStaticProducts = staticProducts.filter(p =>
+            !databaseNames.has(p.name.trim().toLowerCase())
+        );
+
+        products = [
+            ...databaseProducts,
+            ...remainingStaticProducts
+        ];
+
+        renderProductSections();
+
+    } catch (error) {
+        console.error('[Product catalog]', error);
+        // Existing static products remain visible if the API is unavailable.
+    }
+}
+
+// Load the latest catalog.
+loadStoreProducts();
 
         /* ═══ WISHLIST ═══ */
         let wishlist = JSON.parse(localStorage.getItem('kalakar_wish') || '[]');
-        function toggleWish(btn, e) {
-            e.stopPropagation();
-            const card = btn.closest('.product-card');
-            const id = parseInt(card.dataset.id);
-            const idx = wishlist.indexOf(id);
-            if (idx >= 0) { wishlist.splice(idx, 1); btn.innerHTML = '<i class="bi bi-heart"></i>'; showToast('Removed from wishlist'); }
-            else { wishlist.push(id); btn.innerHTML = '<i class="bi bi-heart-fill" style="color:#e05252;"></i>'; showToast('Added to wishlist ♥'); }
-            localStorage.setItem('kalakar_wish', JSON.stringify(wishlist));
-        }
+        
+function toggleWish(btn, e) {
+    e.stopPropagation();
+
+    const card = btn.closest('.product-card');
+    const id = String(card.dataset.id);
+
+    const idx = wishlist.findIndex(item => String(item) === id);
+
+    if (idx >= 0) {
+        wishlist.splice(idx, 1);
+        btn.innerHTML = '<i class="bi bi-heart"></i>';
+        showToast('Removed from wishlist');
+    } else {
+        wishlist.push(id);
+        btn.innerHTML =
+            '<i class="bi bi-heart-fill" style="color:#e05252;"></i>';
+        showToast('Added to wishlist ♥');
+    }
+
+    localStorage.setItem('kalakar_wish', JSON.stringify(wishlist));
+}
 
         /* ═══ CART ═══ */
         let cart = JSON.parse(localStorage.getItem('kalakar_cart') || '[]');
@@ -4501,27 +4642,55 @@
           <div class="c-name">${it.name}</div>
           <div class="c-meta">${it.desc}</div>
           <div class="c-qrow">
-            <button class="c-qbtn" onclick="cQty(${it.id},-1)">−</button>
+            <button class="c-qbtn" onclick="cQty(decodeURIComponent('${encodeURIComponent(String(it.id)).replace(/'/g, '%27')}'),-1)"
+>−</button>
             <span style="font-size:13px;min-width:22px;text-align:center;">${it.qty}</span>
-            <button class="c-qbtn" onclick="cQty(${it.id},1)">+</button>
+            <button class="c-qbtn" onclick="cQty(decodeURIComponent('${encodeURIComponent(String(it.id)).replace(/'/g, '%27')}'),1)">+</button>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;">
-          <button class="c-rem" onclick="cRemove(${it.id})">&times;</button>
+          <button class="c-rem" onclick="cRemove(decodeURIComponent('${encodeURIComponent(String(it.id)).replace(/'/g, '%27')}'))">&times;</button>
           <div class="c-price">₹${(it.price * it.qty).toLocaleString()}</div>
         </div>
       </div>`).join('');
             }
         }
 
-        function addToCart(p, qty = 1) {
-            const ex = cart.find(i => i.id === p.id);
-            ex ? ex.qty += qty : cart.push({ ...p, qty });
-            saveCart(); renderCart(); bumpBadge();
-            showToast(`${p.name} added to bag 🛍️`);
-        }
-        function cQty(id, d) { const it = cart.find(i => i.id === id); if (!it) return; it.qty += d; if (it.qty <= 0) cRemove(id); else { saveCart(); renderCart(); } }
-        function cRemove(id) { cart = cart.filter(i => i.id !== id); saveCart(); renderCart(); }
+        
+function addToCart(p, qty = 1) {
+    const ex = cart.find(i => String(i.id) === String(p.id));
+
+    ex ? ex.qty += qty : cart.push({ ...p, qty });
+
+    saveCart();
+    renderCart();
+    bumpBadge();
+
+    showToast(`${p.name} added to bag 🛍️`);
+}
+
+function cQty(id, d) {
+    const it = cart.find(i => String(i.id) === String(id));
+
+    if (!it) return;
+
+    it.qty += d;
+
+    if (it.qty <= 0) {
+        cRemove(id);
+    } else {
+        saveCart();
+        renderCart();
+    }
+}
+
+function cRemove(id) {
+    cart = cart.filter(i => String(i.id) !== String(id));
+
+    saveCart();
+    renderCart();
+}
+
         function bumpBadge() { const el = document.getElementById('cartCount'); el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), 400); }
         function openCart() { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('open'); }
         function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); }
@@ -4531,7 +4700,7 @@
         let qvP = null, qvQ = 1;
         function openQV(id, e) {
             if (e) e.stopPropagation();
-            qvP = products.find(p => p.id === id);
+qvP = products.find(p => String(p.id) === String(id));
             if (!qvP) return;
             qvQ = 1;
             document.getElementById('qvImg').src = qvP.img;
@@ -4739,10 +4908,41 @@
             const q = this.value.toLowerCase().trim();
             const res = document.getElementById('searchResults');
             if (!q) { res.classList.remove('show'); return; }
-            const m = products.filter(p => p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q));
-            if (!m.length) { res.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:12px 0;">No results found for "' + this.value + '".</p>'; res.classList.add('show'); return; }
-            res.innerHTML = m.map(p => `<div class="sri" onclick="openQV(${p.id});closeSearch()"><img src="${p.img}" alt="${p.name}" style="width:44px;height:44px;object-fit:cover;border-radius:4px;flex-shrink:0;"/><div><div class="sri-name">${p.name}</div><div class="sri-price">${p.cat} · ₹${p.price.toLocaleString()}</div></div></div>`).join('');
-            res.classList.add('show');
+           
+const m = products.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    (p.cat || '').toLowerCase().includes(q)
+);
+
+if (!m.length) {
+    res.innerHTML =
+        '<p style="font-size:13px;color:var(--muted);padding:12px 0;">No results found.</p>';
+    res.classList.add('show');
+    return;
+}
+
+res.innerHTML = m.map(p => {
+    const safeId = encodeURIComponent(String(p.id)).replace(/'/g, '%27');
+
+    return `
+        <div class="sri"
+            onclick="openQV(decodeURIComponent('${safeId}'));closeSearch()">
+
+            <img src="${escapeCatalogHTML(p.img)}"
+                alt="${escapeCatalogHTML(p.name)}"
+                style="width:44px;height:44px;object-fit:cover;border-radius:4px;flex-shrink:0;">
+
+            <div>
+                <div class="sri-name">${escapeCatalogHTML(p.name)}</div>
+                <div class="sri-price">
+                    ${escapeCatalogHTML(p.cat)} · ₹${Number(p.price).toLocaleString('en-IN')}
+                </div>
+            </div>
+        </div>`;
+}).join('');
+
+res.classList.add('show');
+
         });
 
         /* ═══ POPUP ═══ */

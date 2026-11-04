@@ -801,6 +801,7 @@ async function loadSellerPortal() {
 
     if (data.sellerStatus === 'approved') {
   showSection('sellerDashboard');
+    await loadSellerProducts();
 
   const application = data.application || {};
 
@@ -897,6 +898,9 @@ document.querySelectorAll('.seller-nav').forEach(button => {
     document.getElementById(
       button.dataset.panel
     ).classList.remove('hidden');
+    if (button.dataset.panel === 'productsPanel') {
+  loadSellerProducts();
+}
   });
 });
 
